@@ -12,6 +12,7 @@ void main() {
 
   MyDb.instance.init();
 
+  // Load both fonts on app startup, in case user doesn't have font installed
   _loadHafsOriginalFonts();
   _loadHafsColouredFonts();
 
@@ -31,19 +32,16 @@ Future<void> _loadHafsOriginalFonts() async {
 }
 
 Future<void> _loadHafsColouredFonts() async {
-  log('Start loading hafs original fonts');
-  await RuntimeFontLoader.loadFont(
-    assetPath: 'fonts/hafs-qcf4/color/QCF4_Hafs_01_W_COLOR-Regular.ttf',
-    fontFamily: 'QCF4_Hafs_01_W_COLOR',
-  );
-  // for (var i = 1; i <= 47; i++) {
-  //   final index = i.toString().padLeft(2, '0');
-  //   await RuntimeFontLoader.loadFont(
-  //     assetPath: 'fonts/hafs-qcf4/color/QCF4_Hafs_${index}_W.ttf',
-  //     fontFamily: 'QCF4_Hafs_${index}_W',
-  //   );
-  // }
-  log('Finish loading hafs original fonts');
+  log('Start loading hafs color fonts');
+  // TODO: Update the limit number when new fonts is added
+  for (var i = 1; i <= 1; i++) {
+    final index = i.toString().padLeft(2, '0');
+    await RuntimeFontLoader.loadFont(
+      assetPath: 'fonts/hafs-qcf4/color/QCF4_Hafs_${index}_W_COLOR.ttf',
+      fontFamily: 'QCF4_Hafs_${index}_W_COLOR',
+    );
+  }
+  log('Finish loading hafs color fonts');
 }
 
 class MyApp extends StatelessWidget {

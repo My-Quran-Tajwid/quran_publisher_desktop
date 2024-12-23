@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'database/mydb.dart';
 import 'utils/runtime_font_loader.dart';
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
+        textTheme: GoogleFonts.spaceGroteskTextTheme(),
       ),
       home: const HomePage(),
     );

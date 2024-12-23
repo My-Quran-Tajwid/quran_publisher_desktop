@@ -36,6 +36,7 @@ dependencies:
   drift_flutter: ^0.2.1
   drift: ^2.21.0
   gap: ^3.0.1
+  google_fonts: ^6.2.1
   package_info_plus: ^8.1.1
   path_provider: ^2.1.5
   path: ^1.9.0

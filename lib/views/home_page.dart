@@ -37,7 +37,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late Future<List<SurahItem>> _surahListFuture;
 
-  TajwidOptions _selectedTajwidOption = TajwidOptions.tajwidKdn;
+  // TODO: Default to Tajwid KDN after the fonts is ready
+  TajwidOptions _selectedTajwidOption = TajwidOptions.noTajwid;
 
   // Set default to surah al fatihah
   int fromSurah = 1;
@@ -98,8 +99,13 @@ class _HomePageState extends State<HomePage> {
                             ),
                           );
                         },
-                        child: Text('Quran Computer Publication',
-                            style: Theme.of(context).textTheme.titleLarge),
+                        child: const Text(
+                          'Quran Computer Publication',
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
                     ),
                     const Gap(24),
@@ -148,6 +154,14 @@ class _HomePageState extends State<HomePage> {
                               )
                             ],
                           ),
+                          // TODO: Remove this warning after the fonts is ready
+                          if (_selectedTajwidOption == TajwidOptions.tajwidKdn)
+                            const Text(
+                              'Warning: Tajwid font is experimental and in early stage of development. You might encounter missing glyphs.',
+                              style: TextStyle(
+                                color: Colors.deepOrange,
+                              ),
+                            ),
                         ],
                       ),
                     ),

@@ -1,4 +1,4 @@
-name: Build Windows Portable .EXE on Demand
+name: Windows .EXE (Portable)
 
 on:
   workflow_dispatch:

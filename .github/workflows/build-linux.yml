@@ -1,4 +1,4 @@
-name: Build Linux Portable Executable on Demand
+name: Linux (Portable)
 
 on:
   workflow_dispatch:

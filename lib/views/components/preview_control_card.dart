@@ -43,9 +43,9 @@ class _PreviewControlCardState extends State<PreviewControlCard> {
                 items: PreviewType.values
                     .map((previewType) => DropdownMenuItem(
                           value: previewType,
-                          child: Text(previewType.label),
                           // TODO: Remove this after adding page preview feature
                           enabled: previewType == PreviewType.justText,
+                          child: Text(previewType.label),
                         ))
                     .toList(),
                 onChanged: (value) {

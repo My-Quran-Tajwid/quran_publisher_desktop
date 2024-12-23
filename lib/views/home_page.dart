@@ -9,6 +9,7 @@ import 'package:toastification/toastification.dart';
 import '../database/app_database.dart';
 import '../database/mydb.dart';
 import '../model/manuscript_string.dart';
+import 'components/kalimah_preview_widget.dart';
 import 'components/preview_control_card.dart';
 
 enum TajwidOptions {
@@ -272,36 +273,11 @@ class _HomePageState extends State<HomePage> {
                               const Gap(8),
                               Expanded(
                                 flex: 3,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: Colors.white70,
-                                  ),
-                                  height: 45,
-                                  child: FutureBuilder(
-                                    future: MyDb.instance.database
-                                        .getCodePointsForAyat(
-                                            surahNumber: fromSurah,
-                                            ayatNumber: fromAyat),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.hasError) {
-                                        return Text(snapshot.error.toString());
-                                      }
-
-                                      if (!snapshot.hasData) {
-                                        return const LinearProgressIndicator();
-                                      }
-
-                                      return Icon(
-                                        IconData(
-                                          snapshot.data!.$1.first,
-                                          fontFamily: _getFontFamily(
-                                              snapshot.data!.$2,
-                                              _selectedTajwidOption),
-                                        ),
-                                      );
-                                    },
-                                  ),
+                                child: KalimahPreviewWidget(
+                                  surahNumber: fromSurah,
+                                  ayatNumber: fromAyat,
+                                  tajwidOption: _selectedTajwidOption,
+                                  kalimahPreview: KalimahPreview.showFirst,
                                 ),
                               ),
                             ],
@@ -392,36 +368,11 @@ class _HomePageState extends State<HomePage> {
                               const Gap(8),
                               Expanded(
                                 flex: 3,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: Colors.white70,
-                                  ),
-                                  height: 45,
-                                  child: FutureBuilder(
-                                    future: MyDb.instance.database
-                                        .getCodePointsForAyat(
-                                            surahNumber: toSurah,
-                                            ayatNumber: toAyat),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.hasError) {
-                                        return Text(snapshot.error.toString());
-                                      }
-
-                                      if (!snapshot.hasData) {
-                                        return const LinearProgressIndicator();
-                                      }
-
-                                      return Icon(
-                                        IconData(
-                                          snapshot.data!.$1.last,
-                                          fontFamily: _getFontFamily(
-                                              snapshot.data!.$2,
-                                              _selectedTajwidOption),
-                                        ),
-                                      );
-                                    },
-                                  ),
+                                child: KalimahPreviewWidget(
+                                  surahNumber: toSurah,
+                                  ayatNumber: toAyat,
+                                  tajwidOption: _selectedTajwidOption,
+                                  kalimahPreview: KalimahPreview.showLast,
                                 ),
                               ),
                             ],

@@ -37,7 +37,7 @@ Future<void> _loadHafsColouredFonts() async {
   for (var i = 1; i <= 1; i++) {
     final index = i.toString().padLeft(2, '0');
     await RuntimeFontLoader.loadFont(
-      assetPath: 'fonts/hafs-qcf4/color/QCF4_Hafs_${index}_W_COLOR.ttf',
+      assetPath: 'fonts/hafs-qcf4/color/QCF4_Hafs_${index}_W_COLOR-Regular.ttf',
       fontFamily: 'QCF4_Hafs_${index}_W_COLOR',
     );
   }

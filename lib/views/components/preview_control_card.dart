@@ -4,13 +4,18 @@ import 'package:gap/gap.dart';
 import '../home_page.dart';
 
 class PreviewControlCard extends StatefulWidget {
-  const PreviewControlCard(
-      {super.key,
-      required this.onFontSizeChanged,
-      required this.onSpacingChanged});
+  const PreviewControlCard({
+    super.key,
+    required this.onFontSizeChanged,
+    required this.onSpacingChanged,
+    required this.onPreviewTypeChanged,
+    this.previewType = PreviewType.justText,
+  });
 
   final Function(double fontSize) onFontSizeChanged;
   final Function(double spacing) onSpacingChanged;
+  final Function(PreviewType previewType) onPreviewTypeChanged;
+  final PreviewType? previewType;
 
   @override
   State<PreviewControlCard> createState() => _PreviewControlCardState();
@@ -44,14 +49,14 @@ class _PreviewControlCardState extends State<PreviewControlCard> {
                     .map((previewType) => DropdownMenuItem(
                           value: previewType,
                           // TODO: Remove this after adding page preview feature
-                          enabled: previewType == PreviewType.justText,
                           child: Text(previewType.label),
                         ))
                     .toList(),
                 onChanged: (value) {
                   if (value == null) return;
+                  widget.onPreviewTypeChanged(value);
                 },
-                value: PreviewType.justText,
+                value: widget.previewType,
               )
             ],
           ),

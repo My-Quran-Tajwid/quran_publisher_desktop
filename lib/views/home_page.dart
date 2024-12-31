@@ -10,6 +10,7 @@ import '../database/mydb.dart';
 import '../model/manuscript_string.dart';
 import 'components/app_title_widget.dart';
 import 'components/kalimah_preview_widget.dart';
+import 'components/mushaf_page_view.dart';
 import 'components/preview_control_card.dart';
 
 enum TajwidOptions {
@@ -51,6 +52,7 @@ class _HomePageState extends State<HomePage> {
   // We may use this if we starte support RichText copy/paste
   double _previewFontSize = 28;
   double _previewSpacing = 1;
+  PreviewType _previewType = PreviewType.justText;
 
   @override
   void initState() {
@@ -412,113 +414,127 @@ class _HomePageState extends State<HomePage> {
                           _previewSpacing = spacing;
                         });
                       },
+                      previewType: _previewType,
+                      onPreviewTypeChanged: (previewType) {
+                        setState(() {
+                          _previewType = previewType;
+                        });
+                      },
                     ),
                   ],
                 ),
               ),
             ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Directionality(
-                    textDirection: TextDirection.rtl,
-                    child: FutureBuilder(
-                      future: MyDb.instance.database.getManuscriptString(
-                          surahStart: fromSurah,
-                          ayatStart: fromAyat,
-                          surahEnd: toSurah,
-                          ayatEnd: toAyat),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          return Text(snapshot.error.toString());
-                        }
+            if (_previewType == PreviewType.mushafPage)
+              Expanded(
+                  child: MushafPageView(
+                tajwidOption: _selectedTajwidOption,
+              ))
+            else
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: FutureBuilder(
+                        future: MyDb.instance.database.getManuscriptString(
+                            surahStart: fromSurah,
+                            ayatStart: fromAyat,
+                            surahEnd: toSurah,
+                            ayatEnd: toAyat),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return Text(snapshot.error.toString());
+                          }
 
-                        if (!snapshot.hasData) {
-                          return const LinearProgressIndicator();
-                        }
+                          if (!snapshot.hasData) {
+                            return const LinearProgressIndicator();
+                          }
 
-                        // First, group the text according to the font name, then
-                        // build a widget for each font name. After that, baru
-                        // layout untuk the text itself
-                        final groupedByFontName = groupBy(snapshot.data!,
-                            (ManuscriptString ms) => ms.fontName);
+                          // First, group the text according to the font name, then
+                          // build a widget for each font name. After that, baru
+                          // layout untuk the text itself
+                          final groupedByFontName = groupBy(snapshot.data!,
+                              (ManuscriptString ms) => ms.fontName);
 
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            ...groupedByFontName.entries.map(
-                              (e) => Builder(
-                                builder: (context) {
-                                  final StringBuffer sb = StringBuffer();
-                                  for (var element in e.value) {
-                                    sb.write(element.text);
-                                  }
-                                  final fontFamily = _getFontFamily(
-                                      e.key, _selectedTajwidOption);
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              ...groupedByFontName.entries.map(
+                                (e) => Builder(
+                                  builder: (context) {
+                                    final StringBuffer sb = StringBuffer();
+                                    for (var element in e.value) {
+                                      sb.write(element.text);
+                                    }
+                                    final fontFamily = _getFontFamily(
+                                        e.key, _selectedTajwidOption);
 
-                                  // Use bidi to make sure text are lay out correctly (setting
-                                  // up just RTL are not enough)
-                                  final bidiText =
-                                      BidiString.fromLogical(sb.toString());
+                                    // Use bidi to make sure text are lay out correctly (setting
+                                    // up just RTL are not enough)
+                                    final bidiText =
+                                        BidiString.fromLogical(sb.toString());
 
-                                  return Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      Text(
-                                        fontFamily,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black26),
-                                      ),
-                                      ...bidiText.paragraphs.map(
-                                        (p) => Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Wrap(
-                                            runSpacing: 8,
-                                            spacing: _previewSpacing,
-                                            children: p.bidiText
-                                                .map(
-                                                  (e) => InkWell(
-                                                    onTap: () {
-                                                      Clipboard.setData(
-                                                        ClipboardData(
-                                                          text: String
-                                                              .fromCharCode(e),
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        Text(
+                                          fontFamily,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black26),
+                                        ),
+                                        ...bidiText.paragraphs.map(
+                                          (p) => Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Wrap(
+                                              runSpacing: 8,
+                                              spacing: _previewSpacing,
+                                              children: p.bidiText
+                                                  .map(
+                                                    (e) => InkWell(
+                                                      onTap: () {
+                                                        Clipboard.setData(
+                                                          ClipboardData(
+                                                            text: String
+                                                                .fromCharCode(
+                                                                    e),
+                                                          ),
+                                                        );
+                                                      },
+                                                      child: Text(
+                                                        String.fromCharCode(e),
+                                                        // textScaler:
+                                                        //     const TextScaler
+                                                        //         .linear(2),
+                                                        style: TextStyle(
+                                                          fontFamily:
+                                                              fontFamily,
+                                                          fontSize:
+                                                              _previewFontSize,
                                                         ),
-                                                      );
-                                                    },
-                                                    child: Text(
-                                                      String.fromCharCode(e),
-                                                      // textScaler:
-                                                      //     const TextScaler
-                                                      //         .linear(2),
-                                                      style: TextStyle(
-                                                        fontFamily: fontFamily,
-                                                        fontSize:
-                                                            _previewFontSize,
                                                       ),
                                                     ),
-                                                  ),
-                                                )
-                                                .toList(),
+                                                  )
+                                                  .toList(),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  );
-                                },
+                                      ],
+                                    );
+                                  },
+                                ),
                               ),
-                            ),
-                          ],
-                        );
-                      },
+                            ],
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
           ],
         ),
       ),

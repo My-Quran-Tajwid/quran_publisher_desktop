@@ -24,7 +24,8 @@ Future<void> _loadHafsOriginalFonts() async {
   for (var i = 1; i <= 47; i++) {
     final index = i.toString().padLeft(2, '0');
     await RuntimeFontLoader.loadFont(
-      assetPath: 'fonts/hafs-qcf4/original/QCF4_Hafs_${index}_W.ttf',
+      assetPath:
+          'fonts/quran-fonts/fonts/King Fahd Complex/Original/Hafs-QCF4/QCF4_Hafs_${index}_W.ttf',
       fontFamily: 'QCF4_Hafs_${index}_W',
     );
   }
@@ -34,12 +35,18 @@ Future<void> _loadHafsOriginalFonts() async {
 Future<void> _loadHafsColouredFonts() async {
   log('Start loading hafs color fonts');
   // TODO: Update the limit number when new fonts is added
-  for (var i = 1; i <= 1; i++) {
+  for (var i = 1; i <= 47; i++) {
     final index = i.toString().padLeft(2, '0');
-    await RuntimeFontLoader.loadFont(
-      assetPath: 'fonts/hafs-qcf4/color/QCF4_Hafs_${index}_W_COLOR-Regular.ttf',
-      fontFamily: 'QCF4_Hafs_${index}_W_COLOR',
-    );
+    try {
+      await RuntimeFontLoader.loadFont(
+        assetPath:
+            'fonts/quran-fonts/fonts/King Fahd Complex/Hafs-QCF4-Colors/QCF4_Hafs_${index}_W_COLOR-Regular.ttf',
+        fontFamily: 'QCF4_Hafs_${index}_W_COLOR',
+      );
+    } catch (e) {
+      // Errors are expected because not all fonts are available yet
+      log('Failed to load hafs color font for index $index');
+    }
   }
   log('Finish loading hafs color fonts');
 }

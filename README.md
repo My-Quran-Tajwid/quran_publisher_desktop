@@ -14,13 +14,29 @@ Go to [releases](https://github.com/My-Quran-Tajwid/quran_publisher_desktop/rele
 
 Install Flutter: https://docs.flutter.dev/get-started/install
 
-Run 
+Clone repo with submodules:
 
+```shell
+git clone --recursive https://github.com/My-Quran-Tajwid/baca.git 
 ```
+
+If you have previously git clone-d without the `--recursive` flag, run this command to get the submodules:
+
+```shell
+git submodule update --init
+```
+
+> [!TIP]
+> To update the submodules next time, run this command:
+> ```shell
+> git submodule update --remote
+> ```
+
+Then, run the app: 
+
+```shell
 flutter run
 ```
 
 (as of now, only tested on Windows)
-
-
 

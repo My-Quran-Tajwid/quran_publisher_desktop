@@ -66,8 +66,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - fonts/hafs-qcf4/original/
-    - fonts/hafs-qcf4/color/
+    - fonts/quran-fonts/fonts/King Fahd Complex/Original/Hafs-QCF4/
+    - fonts/quran-fonts/fonts/King Fahd Complex/Hafs-QCF4-Colors/
     - assets/database/
     - assets/logo/
     - assets/images/
@@ -86,7 +86,7 @@ flutter:
   fonts:
     - family: QCF4_Surah_Juzuk_Mudah
       fonts:
-        - asset: fonts/hafs-qcf4/QCF4_Surah_Juzuk_Mudah-Regular.ttf
+        - asset: fonts/quran-fonts/fonts/King Fahd Complex/Custom/QCF4_Surah_Juzuk_Mudah-Regular.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

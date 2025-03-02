@@ -34,8 +34,7 @@ class RuntimeFontLoader {
 
       return fontFamily;
     } catch (e) {
-      // throw Exception('Failed to load font: $e');
-      rethrow;
+      throw Exception('Failed to load font: $e');
     }
   }
 

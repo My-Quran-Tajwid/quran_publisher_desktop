@@ -33,9 +33,28 @@ class AppTitleWidget extends StatelessWidget {
               ),
             ),
             Gap(8),
-            Chip(label: Text('Beta'))
+            _BetaStamp(),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// A Beta Chip
+class _BetaStamp extends StatelessWidget {
+  const _BetaStamp();
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.tertiary,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Text(
+        'Beta',
+        style: TextStyle(color: Theme.of(context).colorScheme.onTertiary),
       ),
     );
   }

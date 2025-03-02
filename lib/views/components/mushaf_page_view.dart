@@ -34,7 +34,7 @@ class MushafPageView extends StatelessWidget {
       child: Column(
         children: [
           // Header
-          Container(
+          SizedBox(
             height: 65,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 70),
@@ -62,7 +62,7 @@ class MushafPageView extends StatelessWidget {
               ),
             ),
           ),
-          Gap(50),
+          const Gap(50),
           // Body
           Row(
             children: [

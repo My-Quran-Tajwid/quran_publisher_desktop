@@ -22,8 +22,13 @@ jobs:
         run: |
           flutter pub get
           flutter build windows --release
+          
+      - name: Download Visual C++ Redistributable DLLs
+        run: |
+          Invoke-WebRequest -Uri "https://github.com/My-Quran-Tajwid/visual-cpp-redistributable/archive/refs/heads/main.zip" -OutFile "vcredist.zip"
+          Expand-Archive -Path "vcredist.zip" -DestinationPath "temp_vcredist"
+          Copy-Item -Path "temp_vcredist\visual-cpp-redistributable-main\*.dll" -Destination "build\windows\x64\runner\Release\" -Force
 
-      # - run: cd build/windows/x64/runner/Release/ && powershell Compress-Archive -Path * -DestinationPath windows-x64-portable.zip
       - name: Upload Windows App to release
         uses: actions/upload-artifact@v4
         with:

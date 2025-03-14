@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "My Quran Tajwid"
-#define MyAppVersion "0.0.3"
+#define MyAppVersion GetStringFileInfo("..\build\windows\x64\runner\Release\quran_publisher_desktop.exe", "ProductVersion")
 #define MyAppPublisher "Muhammad Fareez"
 #define MyAppURL "https://qurantajwid.my/"
 #define MyAppExeName "quran_publisher_desktop.exe"

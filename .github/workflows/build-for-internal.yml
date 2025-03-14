@@ -1,11 +1,12 @@
-name: Build Windows & Linux Executable on Release
+name: Build Windows & Linux Executable for Internal Testing
 
 on:
-  release:
-    types: [published]
-
-permissions:
-  contents: write
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'App version override (leave empty to extract from pubspec.yaml)'
+        required: false
+        default: ''
 
 jobs:
   extract_version:
@@ -16,12 +17,16 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
-      - name: Extract version from pubspec.yaml
+      - name: Extract version from pubspec.yaml or use input
         id: get_version
         run: |
-          VERSION=$(grep -oP 'version:\s*\K[\d\.]+(?=\+)' pubspec.yaml)
+          if [ -z "${{ github.event.inputs.version }}" ]; then
+            VERSION=$(grep -oP 'version:\s*\K[\d\.]+(?=\+)' pubspec.yaml)
+          else
+            VERSION="${{ github.event.inputs.version }}"
+          fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Extracted version: $VERSION"
+          echo "Using version: $VERSION"
 
   build_windows:
     name: 🪟 Build Windows App
@@ -47,10 +52,11 @@ jobs:
           Copy-Item -Path "temp_vcredist\visual-cpp-redistributable-main\*.dll" -Destination "build\windows\x64\runner\Release\" -Force
       - name: Create Windows zip archive
         run: cd build/windows/x64/runner/Release/ && powershell Compress-Archive -Path * -DestinationPath "MQJ-${{ needs.extract_version.outputs.version }}-windows-x64.zip"
-      - name: Upload Windows App to release
-        uses: softprops/action-gh-release@v1
+      - name: Upload Windows App as artifact
+        uses: actions/upload-artifact@v3
         with:
-          files: build/windows/x64/runner/Release/MQJ-${{ needs.extract_version.outputs.version }}-windows-x64.zip
+          name: MQJ-${{ needs.extract_version.outputs.version }}-windows-x64
+          path: build/windows/x64/runner/Release/MQJ-${{ needs.extract_version.outputs.version }}-windows-x64.zip
 
   build_linux:
     name: 🐧 Build Linux App
@@ -75,7 +81,8 @@ jobs:
           flutter build linux --release
       - name: Create Linux zip archive
         run: cd build/linux/x64/release/bundle/ && zip -r "MQJ-${{ needs.extract_version.outputs.version }}-linux-x64.zip" *
-      - name: Upload Linux App to release
-        uses: softprops/action-gh-release@v1
+      - name: Upload Linux App as artifact
+        uses: actions/upload-artifact@v3
         with:
-          files: build/linux/x64/release/bundle/MQJ-${{ needs.extract_version.outputs.version }}-linux-x64.zip
+          name: MQJ-${{ needs.extract_version.outputs.version }}-linux-x64
+          path: build/linux/x64/release/bundle/MQJ-${{ needs.extract_version.outputs.version }}-linux-x64.zip

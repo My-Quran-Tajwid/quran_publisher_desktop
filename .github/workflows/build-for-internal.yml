@@ -52,11 +52,20 @@ jobs:
           Copy-Item -Path "temp_vcredist\visual-cpp-redistributable-main\*.dll" -Destination "build\windows\x64\runner\Release\" -Force
       - name: Create Windows zip archive
         run: cd build/windows/x64/runner/Release/ && powershell Compress-Archive -Path * -DestinationPath "MQJ-${{ needs.extract_version.outputs.version }}-windows-x64.zip"
+      - name: Run Inno Setup Compiler
+        run: |
+          "%programfiles(x86)%\Inno Setup 6\iscc.exe" "inno-compiler\inno-build-installer.iss"
+        shell: cmd
+      - name: Rename installer to include version
+        run: |
+          Move-Item -Path "build\installer\app-windows-installer.exe" -Destination "MQJ-${{ needs.extract_version.outputs.version }}-windows-64-installer.exe" -Force
       - name: Upload Windows App as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: MQJ-${{ needs.extract_version.outputs.version }}-windows-x64
-          path: build/windows/x64/runner/Release/MQJ-${{ needs.extract_version.outputs.version }}-windows-x64.zip
+          name: MQJ-${{ needs.extract_version.outputs.version }}-windows
+          path: |
+            build/windows/x64/runner/Release/MQJ-${{ needs.extract_version.outputs.version }}-windows-x64.zip
+            MQJ-${{ needs.extract_version.outputs.version }}-windows-64-installer.exe
 
   build_linux:
     name: 🐧 Build Linux App
@@ -82,7 +91,7 @@ jobs:
       - name: Create Linux zip archive
         run: cd build/linux/x64/release/bundle/ && zip -r "MQJ-${{ needs.extract_version.outputs.version }}-linux-x64.zip" *
       - name: Upload Linux App as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MQJ-${{ needs.extract_version.outputs.version }}-linux-x64
           path: build/linux/x64/release/bundle/MQJ-${{ needs.extract_version.outputs.version }}-linux-x64.zip

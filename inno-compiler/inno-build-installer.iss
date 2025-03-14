@@ -36,7 +36,7 @@ DisableProgramGroupPage=yes
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=..\build\installer
 OutputBaseFilename=app-windows-installer
-SetupIconFile=..\assets\installer_icon.ico
+SetupIconFile=.\installer_icon.ico
 SolidCompression=yes
 WizardStyle=modern
 

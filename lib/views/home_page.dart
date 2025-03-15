@@ -38,6 +38,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late Future<List<SurahItem>> _surahListFuture;
+  late TextEditingController _fromAyatController;
+  late TextEditingController _toAyatController;
 
   // TODO: Default to Tajwid KDN after the fonts is ready
   TajwidOptions _selectedTajwidOption = TajwidOptions.noTajwid;
@@ -59,9 +61,11 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     _surahListFuture = MyDb.instance.database.getAllSurah();
+    _fromAyatController = TextEditingController(text: fromAyat.toString());
+    _toAyatController = TextEditingController(text: toAyat.toString());
   }
 
-  Future<int?> getTotalAyatInSurah(int surahNumber) async {
+  Future<int?> _getTotalAyatInSurah(int surahNumber) async {
     final db = MyDb.instance.database;
     return await db.getTotalAyatInSurah(surahNumber);
   }
@@ -71,6 +75,72 @@ class _HomePageState extends State<HomePage> {
       return '${fontName}_COLOR';
     }
     return fontName;
+  }
+
+  void _setFromSurah(newFromSurah) async {
+    if (newFromSurah == null) return;
+    if (newFromSurah == fromSurah) return;
+    if (newFromSurah > toSurah) {
+      setState(() => toSurah = newFromSurah);
+    }
+
+    // Sets the value
+    setState(() => fromSurah = newFromSurah);
+
+    // Update its ayat number value. If the max ayat in the surah is less than the current fromAyat, set it to max ayat
+    // in the surah
+    final totalAyat = await _getTotalAyatInSurah(fromSurah);
+    if (totalAyat != null && fromAyat > totalAyat) {
+      setState(() => fromAyat = totalAyat);
+      _fromAyatController.text = totalAyat.toString();
+    }
+  }
+
+  void _setFromAyat(String value, int forSurahNumber) async {
+    if (value.isEmpty) return;
+    final newfromAyat = int.tryParse(value);
+    if (newfromAyat == null) return;
+    if (newfromAyat == fromAyat) return;
+
+    // Check if the new fromAyat is greater than the total ayat in the surah
+    final totalAyat = await _getTotalAyatInSurah(forSurahNumber);
+    if (totalAyat != null && newfromAyat > totalAyat) {
+      setState(() => fromAyat = totalAyat);
+      _fromAyatController.text = totalAyat.toString();
+      return;
+    } else {
+      // Sets the value
+      setState(() => fromAyat = newfromAyat);
+    }
+
+    // If both surah are the same, ensure that toAyat is not less than newfromAyat
+    if (fromSurah == toSurah && newfromAyat > toAyat) {
+      setState(() => toAyat = newfromAyat);
+      _toAyatController.text = toAyat.toString();
+    }
+  }
+
+  void _setToAyat(String value, int forSurahNumber) async {
+    if (value.isEmpty) return;
+    final newToAyat = int.tryParse(value);
+    if (newToAyat == null) return;
+    if (newToAyat == toAyat) return;
+
+    // Check if the new toAyat is greater than the total ayat in the surah
+    final totalAyat = await _getTotalAyatInSurah(forSurahNumber);
+    if (totalAyat != null && newToAyat > totalAyat) {
+      setState(() => toAyat = totalAyat);
+      _toAyatController.text = totalAyat.toString();
+    } else {
+      // Sets the value
+      setState(() => toAyat = newToAyat);
+    }
+
+    // If both surah are the same, ensure that toAyat is not less than newfromAyat
+    if (fromSurah == toSurah && toAyat < fromAyat) {
+      setState(() => fromAyat = toAyat);
+      _fromAyatController.text = fromAyat.toString();
+    }
   }
 
   @override
@@ -185,18 +255,8 @@ class _HomePageState extends State<HomePage> {
                                               child: Text(
                                                   '${surah.surahNo}. ${surah.namaEnglish} - ${surah.namaArab}'))
                                       ],
-                                      onChanged: (newFromSurah) {
-                                        if (newFromSurah == null) return;
-                                        if (newFromSurah == fromSurah) return;
-                                        if (newFromSurah > toSurah) {
-                                          setState(() {
-                                            toSurah = newFromSurah;
-                                          });
-                                        }
-                                        setState(() {
-                                          fromSurah = newFromSurah;
-                                        });
-                                      },
+                                      onChanged: (value) async =>
+                                          _setFromSurah(value),
                                       value: fromSurah,
                                     );
                                   },
@@ -206,7 +266,7 @@ class _HomePageState extends State<HomePage> {
                               Expanded(
                                 flex: 2,
                                 child: FutureBuilder(
-                                  future: getTotalAyatInSurah(fromSurah),
+                                  future: _getTotalAyatInSurah(fromSurah),
                                   builder: (context, snapshot) {
                                     if (snapshot.hasError) {
                                       return Text(snapshot.error.toString());
@@ -216,33 +276,24 @@ class _HomePageState extends State<HomePage> {
                                       return const LinearProgressIndicator();
                                     }
 
-                                    return DropdownButtonFormField(
-                                      isExpanded: true,
-                                      decoration: const InputDecoration(
-                                        border: OutlineInputBorder(),
-                                      ),
-                                      items: [
-                                        for (var i = 1;
-                                            i <= snapshot.data!;
-                                            i++)
-                                          DropdownMenuItem(
-                                              value: i,
-                                              child: Text(i.toString()))
-                                      ],
-                                      onChanged: (newFromAyat) {
-                                        if (newFromAyat == null) return;
-                                        if (newFromAyat == fromAyat) return;
-                                        if (toAyat < newFromAyat) {
-                                          setState(() {
-                                            toAyat = newFromAyat;
-                                          });
+                                    return Focus(
+                                      onFocusChange: (hasFocus) {
+                                        if (!hasFocus) {
+                                          _setFromAyat(_fromAyatController.text,
+                                              fromSurah);
                                         }
-                                        setState(() {
-                                          fromAyat = newFromAyat;
-                                        });
                                       },
-                                      // Default to the first ayat
-                                      value: fromAyat,
+                                      child: TextFormField(
+                                        controller: _fromAyatController,
+                                        keyboardType: TextInputType.number,
+                                        decoration: InputDecoration(
+                                          border: const OutlineInputBorder(),
+                                          labelText: 'Ayat',
+                                          hintText: '1 - ${snapshot.data}',
+                                        ),
+                                        onFieldSubmitted: (value) async =>
+                                            _setFromAyat(value, fromSurah),
+                                      ),
                                     );
                                   },
                                 ),
@@ -305,7 +356,7 @@ class _HomePageState extends State<HomePage> {
                               Expanded(
                                 flex: 2,
                                 child: FutureBuilder(
-                                  future: getTotalAyatInSurah(toSurah),
+                                  future: _getTotalAyatInSurah(toSurah),
                                   builder: (context, snapshot) {
                                     if (snapshot.hasError) {
                                       return Text(snapshot.error.toString());
@@ -315,29 +366,24 @@ class _HomePageState extends State<HomePage> {
                                       return const LinearProgressIndicator();
                                     }
 
-                                    return DropdownButtonFormField(
-                                      isExpanded: true,
-                                      decoration: const InputDecoration(
-                                        border: OutlineInputBorder(),
-                                      ),
-                                      items: [
-                                        for (var i = 1;
-                                            i <= snapshot.data!;
-                                            i++)
-                                          DropdownMenuItem(
-                                              value: i,
-                                              child: Text(i.toString()))
-                                      ],
-                                      onChanged: (newToAyat) {
-                                        if (newToAyat == null) return;
-                                        if (newToAyat == toAyat) return;
-
-                                        setState(() {
-                                          toAyat = newToAyat;
-                                        });
+                                    return Focus(
+                                      onFocusChange: (hasFocus) {
+                                        if (!hasFocus) {
+                                          _setToAyat(
+                                              _toAyatController.text, toSurah);
+                                        }
                                       },
-                                      // Default to the last ayat in given surah
-                                      value: toAyat,
+                                      child: TextFormField(
+                                        controller: _toAyatController,
+                                        keyboardType: TextInputType.number,
+                                        decoration: InputDecoration(
+                                          border: const OutlineInputBorder(),
+                                          labelText: 'Ayat',
+                                          hintText: '1 - ${snapshot.data}',
+                                        ),
+                                        onFieldSubmitted: (value) async =>
+                                            _setToAyat(value, toSurah),
+                                      ),
                                     );
                                   },
                                 ),

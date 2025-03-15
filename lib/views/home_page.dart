@@ -70,11 +70,20 @@ class _HomePageState extends State<HomePage> {
     return await db.getTotalAyatInSurah(surahNumber);
   }
 
+  /// Get the font family name based on the tajwid options
   String _getFontFamily(String fontName, TajwidOptions tajwidOptions) {
-    if (tajwidOptions == TajwidOptions.tajwidKdn) {
-      return '${fontName}_COLOR';
+    // Skip other font that doesn't have coloured version eg QCF4_QBSML
+    if (!fontName.startsWith('QCF4_Hafs')) {
+      return fontName;
     }
-    return fontName;
+
+    // For normal font (without color), use the original font name
+    if (tajwidOptions != TajwidOptions.tajwidKdn) {
+      return fontName;
+    }
+
+    // Add suffix _COLOR to the font name for colored version
+    return '${fontName}_COLOR';
   }
 
   void _setFromSurah(newFromSurah) async {
@@ -540,26 +549,27 @@ class _HomePageState extends State<HomePage> {
                                               spacing: _previewSpacing,
                                               children: p.bidiText
                                                   .map(
-                                                    (e) => InkWell(
-                                                      onTap: () {
-                                                        Clipboard.setData(
-                                                          ClipboardData(
-                                                            text: String
-                                                                .fromCharCode(
-                                                                    e),
+                                                    (e) => Tooltip(
+                                                      message: e.toString(),
+                                                      child: InkWell(
+                                                        onTap: () {
+                                                          Clipboard.setData(
+                                                            ClipboardData(
+                                                              text: String
+                                                                  .fromCharCode(
+                                                                      e),
+                                                            ),
+                                                          );
+                                                        },
+                                                        child: Text(
+                                                          String.fromCharCode(
+                                                              e),
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                fontFamily,
+                                                            fontSize:
+                                                                _previewFontSize,
                                                           ),
-                                                        );
-                                                      },
-                                                      child: Text(
-                                                        String.fromCharCode(e),
-                                                        // textScaler:
-                                                        //     const TextScaler
-                                                        //         .linear(2),
-                                                        style: TextStyle(
-                                                          fontFamily:
-                                                              fontFamily,
-                                                          fontSize:
-                                                              _previewFontSize,
                                                         ),
                                                       ),
                                                     ),

@@ -16,6 +16,12 @@ void main() {
   _loadHafsOriginalFonts();
   _loadHafsColouredFonts();
 
+  // Load QCF4_QBSML
+  RuntimeFontLoader.loadFont(
+      assetPath:
+          'fonts/quran-fonts/fonts/King Fahd Complex/Original/QCF4_QBSML.ttf',
+      fontFamily: 'QCF4_QBSML');
+
   runApp(const MyApp());
 }
 

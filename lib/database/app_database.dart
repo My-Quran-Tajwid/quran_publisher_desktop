@@ -45,6 +45,24 @@ class AppDatabase extends _$AppDatabase {
     return (codePoints, rows.first.fontName);
   }
 
+  /// Retrieves manuscript strings from the database for a specified range of verses.
+  ///
+  /// Fetches Quranic text with font information for the given surah and ayat range.
+  ///
+  /// Parameters:
+  /// - [surahStart]: The starting surah number (must be positive)
+  /// - [ayatStart]: The starting ayat (verse) number (must be positive)
+  /// - [surahEnd]: Optional ending surah number. If not provided, defaults to [surahStart]
+  /// - [ayatEnd]: Optional ending ayat number. If not provided, defaults to [ayatStart]
+  ///
+  /// Returns a [Future<List<ManuscriptString>>] containing the manuscript strings for
+  /// each verse in the specified range, with appropriate font and text information.
+  ///
+  /// The verses are returned in order by surah, ayat, and word number.
+  ///
+  /// Throws [ArgumentError] if:
+  /// - Surah or ayat numbers are less than 1
+  /// - The ending range comes before the starting range
   Future<List<ManuscriptString>> getManuscriptString({
     required int surahStart,
     required int ayatStart,
@@ -69,14 +87,24 @@ class AppDatabase extends _$AppDatabase {
     // Query using Drift
     final rows = await (select(hafsWordItems)
           ..where((tbl) {
-            if (surahEnd == null || ayatEnd == null) {
-              return (tbl.surah.isBiggerOrEqualValue(surahStart) &
-                  tbl.verse.isBiggerOrEqualValue(ayatStart));
+            // Case 1: Start and end are in the same surah
+            if (surahStart == surahEnd) {
+              return tbl.surah.equals(surahStart) &
+                  tbl.verse.isBiggerOrEqualValue(ayatStart) &
+                  tbl.verse.isSmallerOrEqualValue(ayatEnd!);
             }
-            return ((tbl.surah.isBiggerOrEqualValue(surahStart) &
-                    tbl.verse.isBiggerOrEqualValue(ayatStart))) &
-                ((tbl.surah.isSmallerOrEqualValue(surahEnd) &
-                    tbl.verse.isSmallerOrEqualValue(ayatEnd)));
+
+            // Case 2: Start and end are in different surahs
+            return (
+                // First surah: from ayatStart to end of surah
+                (tbl.surah.equals(surahStart) &
+                        tbl.verse.isBiggerOrEqualValue(ayatStart)) |
+                    // Middle surahs: all ayats
+                    (tbl.surah.isBiggerThanValue(surahStart) &
+                        tbl.surah.isSmallerThanValue(surahEnd!)) |
+                    // Last surah: from beginning to ayatEnd
+                    (tbl.surah.equals(surahEnd) &
+                        tbl.verse.isSmallerOrEqualValue(ayatEnd!)));
           })
           ..orderBy([
             (tbl) => OrderingTerm(expression: tbl.surah),
@@ -91,8 +119,10 @@ class AppDatabase extends _$AppDatabase {
     Map<String, ManuscriptString> result = {};
 
     for (var row in rows) {
-      // Create key in format "surah:verse"
       String key = '${row.surah}:${row.verse}';
+
+      // Make the key unique for QCF4_QBSML font
+      if (row.fontName == 'QCF4_QBSML') key += ':b';
 
       // If we've moved to a new verse, save the previous one
       if (currentKey != '' && currentKey != key) {
@@ -107,15 +137,7 @@ class AppDatabase extends _$AppDatabase {
       currentKey = key;
       currentFontName = row.fontName;
 
-      // Skip Surah name (Type 5)
-      if (row.type != 5) {
-        // Add space between words, except for first word
-        // if (fontCodePoints.isNotEmpty) {
-        //   fontCodePoints.add(32); // Add space character
-        // }
-        // Add FontCode to the list of code points
-        fontCodePoints.add(row.fontCode);
-      }
+      fontCodePoints.add(row.fontCode);
     }
 
     // Don't forget to add the last verse

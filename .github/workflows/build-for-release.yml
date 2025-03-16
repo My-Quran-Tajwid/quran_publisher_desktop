@@ -88,3 +88,38 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: build/linux/x64/release/bundle/MQJ-${{ needs.extract_version.outputs.version }}-linux-x64.zip
+
+  build_macos:
+    runs-on: macos-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Flutter build for MacOS
+        run: |
+          flutter pub get
+          flutter build macos
+
+      - name: Install appdmg
+        run: |
+          npm install -g appdmg
+
+      - name: Building the installer
+        run: |
+          appdmg appdmg/config.json appdmg/QuranPublisherDesktop-Macos.dmg
+
+      - name: Upload MacOS App to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: appdmg/QuranPublisherDesktop-Macos.dmg

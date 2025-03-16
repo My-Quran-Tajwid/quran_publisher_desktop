@@ -1,0 +1,26 @@
+{
+  "title": "Quran Publisher Desktop",
+  "background-color": "#EFFFE9",
+  "icon": "icon.icns",
+  "contents": [
+    {
+      "x": 400,
+      "y": 144,
+      "type": "link",
+      "path": "/Applications"
+    },
+    {
+      "x": 150,
+      "y": 144,
+      "type": "file",
+      "path": "../build/macos/Build/Products/Release/Quran Publisher Desktop.app"
+    }
+  ],
+  "icon-size": 120,
+  "window": {
+    "size": {
+      "width": 550,
+      "height": 300
+    }
+  }
+}

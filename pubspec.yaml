@@ -42,7 +42,7 @@ dependencies:
   path: ^1.9.0
   sqlite3_flutter_libs: ^0.5.26
   sqlite3: ^2.4.7
-  toastification: ^2.3.0
+  toastification: ^3.0.2
   url_launcher: ^6.3.1
 
 dev_dependencies:
@@ -51,7 +51,7 @@ dev_dependencies:
 
   build_runner: ^2.4.13
   drift_dev: ^2.21.2
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

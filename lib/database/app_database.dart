@@ -150,4 +150,51 @@ class AppDatabase extends _$AppDatabase {
 
     return result.values.toList();
   }
+
+  Future<List<ManuscriptString>> getManuscriptStringByPage(
+      int pageNumber) async {
+    // Query using Drift
+    final rows = await (select(hafsWordItems)
+          ..where((tbl) {
+            return tbl.pageNo.equals(pageNumber);
+          }))
+        .get();
+
+    String currentKey = '';
+    String currentFontName = '';
+    List<int> fontCodePoints = [];
+    Map<String, ManuscriptString> result = {};
+
+    for (var row in rows) {
+      String key = '${row.surah}:${row.verse}';
+
+      // Make the key unique for QCF4_QBSML font
+      if (row.fontName == 'QCF4_QBSML') key += ':b';
+
+      // If we've moved to a new verse, save the previous one
+      if (currentKey != '' && currentKey != key) {
+        result[currentKey] = ManuscriptString(
+          text: String.fromCharCodes(fontCodePoints),
+          fontName: currentFontName,
+        );
+        fontCodePoints.clear();
+      }
+
+      // Update current key and font name
+      currentKey = key;
+      currentFontName = row.fontName;
+
+      fontCodePoints.add(row.fontCode);
+    }
+
+    // Don't forget to add the last verse
+    if (currentKey != '') {
+      result[currentKey] = ManuscriptString(
+        text: String.fromCharCodes(fontCodePoints),
+        fontName: currentFontName,
+      );
+    }
+
+    return result.values.toList();
+  }
 }

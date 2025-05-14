@@ -17,7 +17,32 @@ class MushafPageView extends StatefulWidget {
 
 class _MushafPageViewState extends State<MushafPageView> {
   final db = MyDb.instance.database;
+  final FocusNode focusNode = FocusNode();
+  late final TextEditingController pageController;
+
   int currentPage = 1;
+
+  void _updatePage(int page) {
+    if (page < 1 || page > 604) {
+      return;
+    }
+
+    // if same page, do nothing
+    if (currentPage == page) {
+      return;
+    }
+
+    setState(() {
+      currentPage = page;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    pageController = TextEditingController(text: currentPage.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +156,6 @@ class _MushafPageViewState extends State<MushafPageView> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextButton.icon(
                   onPressed: () {
@@ -144,13 +168,53 @@ class _MushafPageViewState extends State<MushafPageView> {
                   icon: const Icon(Icons.navigate_before_outlined),
                   label: const Text('Previous Page'),
                 ),
-                Text(
-                  '$currentPage',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                Spacer(),
+                // The page number input
+                SizedBox(
+                  width: 90,
+                  child: Focus(
+                    onFocusChange: (hasFocus) {
+                      if (!hasFocus) {
+                        _updatePage(int.parse(pageController.text));
+                      }
+                    },
+                    child: TextFormField(
+                      controller: pageController,
+                      focusNode: focusNode,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Enter page';
+                        }
+                        final page = int.tryParse(value);
+                        if (page == null || page < 1 || page > 604) {
+                          return 'Invalid';
+                        }
+                        return null;
+                      },
+                      autovalidateMode: AutovalidateMode.always,
+                      textAlign: TextAlign.center,
+                      maxLength: 3,
+                      decoration: const InputDecoration(
+                        counterText: '',
+                        border: OutlineInputBorder(),
+                        isDense: true,
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 8,
+                        ),
+                      ),
+                      keyboardType: TextInputType.number,
+                      onEditingComplete: () {
+                        _updatePage(int.parse(pageController.text));
+                        focusNode.unfocus();
+                      },
+                    ),
                   ),
                 ),
+                Spacer(),
                 Directionality(
                   textDirection: TextDirection.rtl,
                   child: TextButton.icon(

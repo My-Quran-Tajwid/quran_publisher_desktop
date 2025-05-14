@@ -47,13 +47,14 @@ class MyDb {
 
       log('DB is stored in ${file.path}');
 
-      if (!await file.exists()) {
-        // Extract the pre-populated database file from assets
-        final blob = await rootBundle.load('assets/database/mydb.sqlite');
-        final buffer = blob.buffer;
-        await file.writeAsBytes(
-            buffer.asUint8List(blob.offsetInBytes, blob.lengthInBytes));
-      }
+      // Extract the pre-populated database file from assets
+      // NOTE: Don't check for !await file.exists(), because then the db will not
+      // get updated when the app is updated. Until we found a better solution,
+      // this will work.
+      final blob = await rootBundle.load('assets/database/mydb.sqlite');
+      final buffer = blob.buffer;
+      await file.writeAsBytes(
+          buffer.asUint8List(blob.offsetInBytes, blob.lengthInBytes));
 
       // Also work around limitations on old Android versions
       if (Platform.isAndroid) {

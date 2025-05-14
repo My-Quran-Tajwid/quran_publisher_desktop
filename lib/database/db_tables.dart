@@ -43,3 +43,16 @@ class SurahItems extends Table {
   TextColumn get maksudEnglish => text().named('maksud_english')();
   TextColumn get tempatTurun => text().named('tempat_diturunkan')();
 }
+
+// Imported from Smart Quran app
+class JuzukItems extends Table {
+  @override
+  String get tableName => 'JuzList';
+  IntColumn get juzuk => integer().named('juz')();
+  IntColumn get hizb => integer().named('hizb')();
+  IntColumn get fraction => integer().named('fraction')();
+  IntColumn get surah => integer().named('surah')();
+  IntColumn get ayat => integer().named('verse')();
+  IntColumn get page => integer().named('page')();
+  TextColumn get verseText => text().named('verse_text')();
+}

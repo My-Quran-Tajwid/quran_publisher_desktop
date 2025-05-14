@@ -9,6 +9,7 @@ part 'app_database.g.dart';
   HafsSuraItems,
   HafsWordItems,
   SurahItems,
+  JuzukItems,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.queryExecutor);
@@ -25,6 +26,19 @@ class AppDatabase extends _$AppDatabase {
         .getSingleOrNull();
 
     return surahItem?.bilanganAyat;
+  }
+
+  /// Retrieves the first [JuzukItem] whose page number by the given
+  /// [pageNumber].
+  Future<JuzukItem> getJuzukForPage(int pageNumber) async {
+    final juzs = await (select(juzukItems)
+          ..orderBy([
+            (t) => OrderingTerm(expression: t.page, mode: OrderingMode.desc)
+          ])
+          ..where((tbl) => tbl.page.isSmallerOrEqualValue(pageNumber)))
+        .get();
+
+    return juzs.first;
   }
 
   Future<(List<int> codePoints, String fontName)> getCodePointsForAyat({
@@ -151,6 +165,15 @@ class AppDatabase extends _$AppDatabase {
     return result.values.toList();
   }
 
+  /// Retrieves manuscript strings for all verses on a specified page.
+  ///
+  /// Fetches Quranic text with font information for every verse present on the given page number.
+  ///
+  /// Parameters:
+  /// - [pageNumber]: The page number to retrieve verses for.
+  ///
+  /// Returns a [Future<List<ManuscriptString>>] containing the manuscript strings for
+  /// each verse on the specified page, with appropriate font and text information.
   Future<List<ManuscriptString>> getManuscriptStringByPage(
       int pageNumber) async {
     // Query using Drift

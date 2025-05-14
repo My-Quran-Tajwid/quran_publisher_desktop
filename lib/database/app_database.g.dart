@@ -1368,18 +1368,400 @@ class SurahItemsCompanion extends UpdateCompanion<SurahItem> {
   }
 }
 
+class $JuzukItemsTable extends JuzukItems
+    with TableInfo<$JuzukItemsTable, JuzukItem> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $JuzukItemsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _juzukMeta = const VerificationMeta('juzuk');
+  @override
+  late final GeneratedColumn<int> juzuk = GeneratedColumn<int>(
+      'juz', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _hizbMeta = const VerificationMeta('hizb');
+  @override
+  late final GeneratedColumn<int> hizb = GeneratedColumn<int>(
+      'hizb', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _fractionMeta =
+      const VerificationMeta('fraction');
+  @override
+  late final GeneratedColumn<int> fraction = GeneratedColumn<int>(
+      'fraction', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _surahMeta = const VerificationMeta('surah');
+  @override
+  late final GeneratedColumn<int> surah = GeneratedColumn<int>(
+      'surah', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _ayatMeta = const VerificationMeta('ayat');
+  @override
+  late final GeneratedColumn<int> ayat = GeneratedColumn<int>(
+      'verse', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _pageMeta = const VerificationMeta('page');
+  @override
+  late final GeneratedColumn<int> page = GeneratedColumn<int>(
+      'page', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _verseTextMeta =
+      const VerificationMeta('verseText');
+  @override
+  late final GeneratedColumn<String> verseText = GeneratedColumn<String>(
+      'verse_text', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [juzuk, hizb, fraction, surah, ayat, page, verseText];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'JuzList';
+  @override
+  VerificationContext validateIntegrity(Insertable<JuzukItem> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('juz')) {
+      context.handle(
+          _juzukMeta, juzuk.isAcceptableOrUnknown(data['juz']!, _juzukMeta));
+    } else if (isInserting) {
+      context.missing(_juzukMeta);
+    }
+    if (data.containsKey('hizb')) {
+      context.handle(
+          _hizbMeta, hizb.isAcceptableOrUnknown(data['hizb']!, _hizbMeta));
+    } else if (isInserting) {
+      context.missing(_hizbMeta);
+    }
+    if (data.containsKey('fraction')) {
+      context.handle(_fractionMeta,
+          fraction.isAcceptableOrUnknown(data['fraction']!, _fractionMeta));
+    } else if (isInserting) {
+      context.missing(_fractionMeta);
+    }
+    if (data.containsKey('surah')) {
+      context.handle(
+          _surahMeta, surah.isAcceptableOrUnknown(data['surah']!, _surahMeta));
+    } else if (isInserting) {
+      context.missing(_surahMeta);
+    }
+    if (data.containsKey('verse')) {
+      context.handle(
+          _ayatMeta, ayat.isAcceptableOrUnknown(data['verse']!, _ayatMeta));
+    } else if (isInserting) {
+      context.missing(_ayatMeta);
+    }
+    if (data.containsKey('page')) {
+      context.handle(
+          _pageMeta, page.isAcceptableOrUnknown(data['page']!, _pageMeta));
+    } else if (isInserting) {
+      context.missing(_pageMeta);
+    }
+    if (data.containsKey('verse_text')) {
+      context.handle(_verseTextMeta,
+          verseText.isAcceptableOrUnknown(data['verse_text']!, _verseTextMeta));
+    } else if (isInserting) {
+      context.missing(_verseTextMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => const {};
+  @override
+  JuzukItem map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return JuzukItem(
+      juzuk: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}juz'])!,
+      hizb: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}hizb'])!,
+      fraction: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}fraction'])!,
+      surah: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}surah'])!,
+      ayat: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}verse'])!,
+      page: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}page'])!,
+      verseText: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}verse_text'])!,
+    );
+  }
+
+  @override
+  $JuzukItemsTable createAlias(String alias) {
+    return $JuzukItemsTable(attachedDatabase, alias);
+  }
+}
+
+class JuzukItem extends DataClass implements Insertable<JuzukItem> {
+  final int juzuk;
+  final int hizb;
+  final int fraction;
+  final int surah;
+  final int ayat;
+  final int page;
+  final String verseText;
+  const JuzukItem(
+      {required this.juzuk,
+      required this.hizb,
+      required this.fraction,
+      required this.surah,
+      required this.ayat,
+      required this.page,
+      required this.verseText});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['juz'] = Variable<int>(juzuk);
+    map['hizb'] = Variable<int>(hizb);
+    map['fraction'] = Variable<int>(fraction);
+    map['surah'] = Variable<int>(surah);
+    map['verse'] = Variable<int>(ayat);
+    map['page'] = Variable<int>(page);
+    map['verse_text'] = Variable<String>(verseText);
+    return map;
+  }
+
+  JuzukItemsCompanion toCompanion(bool nullToAbsent) {
+    return JuzukItemsCompanion(
+      juzuk: Value(juzuk),
+      hizb: Value(hizb),
+      fraction: Value(fraction),
+      surah: Value(surah),
+      ayat: Value(ayat),
+      page: Value(page),
+      verseText: Value(verseText),
+    );
+  }
+
+  factory JuzukItem.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return JuzukItem(
+      juzuk: serializer.fromJson<int>(json['juzuk']),
+      hizb: serializer.fromJson<int>(json['hizb']),
+      fraction: serializer.fromJson<int>(json['fraction']),
+      surah: serializer.fromJson<int>(json['surah']),
+      ayat: serializer.fromJson<int>(json['ayat']),
+      page: serializer.fromJson<int>(json['page']),
+      verseText: serializer.fromJson<String>(json['verseText']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'juzuk': serializer.toJson<int>(juzuk),
+      'hizb': serializer.toJson<int>(hizb),
+      'fraction': serializer.toJson<int>(fraction),
+      'surah': serializer.toJson<int>(surah),
+      'ayat': serializer.toJson<int>(ayat),
+      'page': serializer.toJson<int>(page),
+      'verseText': serializer.toJson<String>(verseText),
+    };
+  }
+
+  JuzukItem copyWith(
+          {int? juzuk,
+          int? hizb,
+          int? fraction,
+          int? surah,
+          int? ayat,
+          int? page,
+          String? verseText}) =>
+      JuzukItem(
+        juzuk: juzuk ?? this.juzuk,
+        hizb: hizb ?? this.hizb,
+        fraction: fraction ?? this.fraction,
+        surah: surah ?? this.surah,
+        ayat: ayat ?? this.ayat,
+        page: page ?? this.page,
+        verseText: verseText ?? this.verseText,
+      );
+  JuzukItem copyWithCompanion(JuzukItemsCompanion data) {
+    return JuzukItem(
+      juzuk: data.juzuk.present ? data.juzuk.value : this.juzuk,
+      hizb: data.hizb.present ? data.hizb.value : this.hizb,
+      fraction: data.fraction.present ? data.fraction.value : this.fraction,
+      surah: data.surah.present ? data.surah.value : this.surah,
+      ayat: data.ayat.present ? data.ayat.value : this.ayat,
+      page: data.page.present ? data.page.value : this.page,
+      verseText: data.verseText.present ? data.verseText.value : this.verseText,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('JuzukItem(')
+          ..write('juzuk: $juzuk, ')
+          ..write('hizb: $hizb, ')
+          ..write('fraction: $fraction, ')
+          ..write('surah: $surah, ')
+          ..write('ayat: $ayat, ')
+          ..write('page: $page, ')
+          ..write('verseText: $verseText')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(juzuk, hizb, fraction, surah, ayat, page, verseText);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is JuzukItem &&
+          other.juzuk == this.juzuk &&
+          other.hizb == this.hizb &&
+          other.fraction == this.fraction &&
+          other.surah == this.surah &&
+          other.ayat == this.ayat &&
+          other.page == this.page &&
+          other.verseText == this.verseText);
+}
+
+class JuzukItemsCompanion extends UpdateCompanion<JuzukItem> {
+  final Value<int> juzuk;
+  final Value<int> hizb;
+  final Value<int> fraction;
+  final Value<int> surah;
+  final Value<int> ayat;
+  final Value<int> page;
+  final Value<String> verseText;
+  final Value<int> rowid;
+  const JuzukItemsCompanion({
+    this.juzuk = const Value.absent(),
+    this.hizb = const Value.absent(),
+    this.fraction = const Value.absent(),
+    this.surah = const Value.absent(),
+    this.ayat = const Value.absent(),
+    this.page = const Value.absent(),
+    this.verseText = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  JuzukItemsCompanion.insert({
+    required int juzuk,
+    required int hizb,
+    required int fraction,
+    required int surah,
+    required int ayat,
+    required int page,
+    required String verseText,
+    this.rowid = const Value.absent(),
+  })  : juzuk = Value(juzuk),
+        hizb = Value(hizb),
+        fraction = Value(fraction),
+        surah = Value(surah),
+        ayat = Value(ayat),
+        page = Value(page),
+        verseText = Value(verseText);
+  static Insertable<JuzukItem> custom({
+    Expression<int>? juzuk,
+    Expression<int>? hizb,
+    Expression<int>? fraction,
+    Expression<int>? surah,
+    Expression<int>? ayat,
+    Expression<int>? page,
+    Expression<String>? verseText,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (juzuk != null) 'juz': juzuk,
+      if (hizb != null) 'hizb': hizb,
+      if (fraction != null) 'fraction': fraction,
+      if (surah != null) 'surah': surah,
+      if (ayat != null) 'verse': ayat,
+      if (page != null) 'page': page,
+      if (verseText != null) 'verse_text': verseText,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  JuzukItemsCompanion copyWith(
+      {Value<int>? juzuk,
+      Value<int>? hizb,
+      Value<int>? fraction,
+      Value<int>? surah,
+      Value<int>? ayat,
+      Value<int>? page,
+      Value<String>? verseText,
+      Value<int>? rowid}) {
+    return JuzukItemsCompanion(
+      juzuk: juzuk ?? this.juzuk,
+      hizb: hizb ?? this.hizb,
+      fraction: fraction ?? this.fraction,
+      surah: surah ?? this.surah,
+      ayat: ayat ?? this.ayat,
+      page: page ?? this.page,
+      verseText: verseText ?? this.verseText,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (juzuk.present) {
+      map['juz'] = Variable<int>(juzuk.value);
+    }
+    if (hizb.present) {
+      map['hizb'] = Variable<int>(hizb.value);
+    }
+    if (fraction.present) {
+      map['fraction'] = Variable<int>(fraction.value);
+    }
+    if (surah.present) {
+      map['surah'] = Variable<int>(surah.value);
+    }
+    if (ayat.present) {
+      map['verse'] = Variable<int>(ayat.value);
+    }
+    if (page.present) {
+      map['page'] = Variable<int>(page.value);
+    }
+    if (verseText.present) {
+      map['verse_text'] = Variable<String>(verseText.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('JuzukItemsCompanion(')
+          ..write('juzuk: $juzuk, ')
+          ..write('hizb: $hizb, ')
+          ..write('fraction: $fraction, ')
+          ..write('surah: $surah, ')
+          ..write('ayat: $ayat, ')
+          ..write('page: $page, ')
+          ..write('verseText: $verseText, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $HafsSuraItemsTable hafsSuraItems = $HafsSuraItemsTable(this);
   late final $HafsWordItemsTable hafsWordItems = $HafsWordItemsTable(this);
   late final $SurahItemsTable surahItems = $SurahItemsTable(this);
+  late final $JuzukItemsTable juzukItems = $JuzukItemsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [hafsSuraItems, hafsWordItems, surahItems];
+      [hafsSuraItems, hafsWordItems, surahItems, juzukItems];
 }
 
 typedef $$HafsSuraItemsTableCreateCompanionBuilder = HafsSuraItemsCompanion
@@ -2049,6 +2431,201 @@ typedef $$SurahItemsTableProcessedTableManager = ProcessedTableManager<
     (SurahItem, BaseReferences<_$AppDatabase, $SurahItemsTable, SurahItem>),
     SurahItem,
     PrefetchHooks Function()>;
+typedef $$JuzukItemsTableCreateCompanionBuilder = JuzukItemsCompanion Function({
+  required int juzuk,
+  required int hizb,
+  required int fraction,
+  required int surah,
+  required int ayat,
+  required int page,
+  required String verseText,
+  Value<int> rowid,
+});
+typedef $$JuzukItemsTableUpdateCompanionBuilder = JuzukItemsCompanion Function({
+  Value<int> juzuk,
+  Value<int> hizb,
+  Value<int> fraction,
+  Value<int> surah,
+  Value<int> ayat,
+  Value<int> page,
+  Value<String> verseText,
+  Value<int> rowid,
+});
+
+class $$JuzukItemsTableFilterComposer
+    extends Composer<_$AppDatabase, $JuzukItemsTable> {
+  $$JuzukItemsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get juzuk => $composableBuilder(
+      column: $table.juzuk, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get hizb => $composableBuilder(
+      column: $table.hizb, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get fraction => $composableBuilder(
+      column: $table.fraction, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get surah => $composableBuilder(
+      column: $table.surah, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get ayat => $composableBuilder(
+      column: $table.ayat, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get page => $composableBuilder(
+      column: $table.page, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get verseText => $composableBuilder(
+      column: $table.verseText, builder: (column) => ColumnFilters(column));
+}
+
+class $$JuzukItemsTableOrderingComposer
+    extends Composer<_$AppDatabase, $JuzukItemsTable> {
+  $$JuzukItemsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get juzuk => $composableBuilder(
+      column: $table.juzuk, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get hizb => $composableBuilder(
+      column: $table.hizb, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get fraction => $composableBuilder(
+      column: $table.fraction, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get surah => $composableBuilder(
+      column: $table.surah, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get ayat => $composableBuilder(
+      column: $table.ayat, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get page => $composableBuilder(
+      column: $table.page, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get verseText => $composableBuilder(
+      column: $table.verseText, builder: (column) => ColumnOrderings(column));
+}
+
+class $$JuzukItemsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $JuzukItemsTable> {
+  $$JuzukItemsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get juzuk =>
+      $composableBuilder(column: $table.juzuk, builder: (column) => column);
+
+  GeneratedColumn<int> get hizb =>
+      $composableBuilder(column: $table.hizb, builder: (column) => column);
+
+  GeneratedColumn<int> get fraction =>
+      $composableBuilder(column: $table.fraction, builder: (column) => column);
+
+  GeneratedColumn<int> get surah =>
+      $composableBuilder(column: $table.surah, builder: (column) => column);
+
+  GeneratedColumn<int> get ayat =>
+      $composableBuilder(column: $table.ayat, builder: (column) => column);
+
+  GeneratedColumn<int> get page =>
+      $composableBuilder(column: $table.page, builder: (column) => column);
+
+  GeneratedColumn<String> get verseText =>
+      $composableBuilder(column: $table.verseText, builder: (column) => column);
+}
+
+class $$JuzukItemsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $JuzukItemsTable,
+    JuzukItem,
+    $$JuzukItemsTableFilterComposer,
+    $$JuzukItemsTableOrderingComposer,
+    $$JuzukItemsTableAnnotationComposer,
+    $$JuzukItemsTableCreateCompanionBuilder,
+    $$JuzukItemsTableUpdateCompanionBuilder,
+    (JuzukItem, BaseReferences<_$AppDatabase, $JuzukItemsTable, JuzukItem>),
+    JuzukItem,
+    PrefetchHooks Function()> {
+  $$JuzukItemsTableTableManager(_$AppDatabase db, $JuzukItemsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$JuzukItemsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$JuzukItemsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$JuzukItemsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> juzuk = const Value.absent(),
+            Value<int> hizb = const Value.absent(),
+            Value<int> fraction = const Value.absent(),
+            Value<int> surah = const Value.absent(),
+            Value<int> ayat = const Value.absent(),
+            Value<int> page = const Value.absent(),
+            Value<String> verseText = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              JuzukItemsCompanion(
+            juzuk: juzuk,
+            hizb: hizb,
+            fraction: fraction,
+            surah: surah,
+            ayat: ayat,
+            page: page,
+            verseText: verseText,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required int juzuk,
+            required int hizb,
+            required int fraction,
+            required int surah,
+            required int ayat,
+            required int page,
+            required String verseText,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              JuzukItemsCompanion.insert(
+            juzuk: juzuk,
+            hizb: hizb,
+            fraction: fraction,
+            surah: surah,
+            ayat: ayat,
+            page: page,
+            verseText: verseText,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$JuzukItemsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $JuzukItemsTable,
+    JuzukItem,
+    $$JuzukItemsTableFilterComposer,
+    $$JuzukItemsTableOrderingComposer,
+    $$JuzukItemsTableAnnotationComposer,
+    $$JuzukItemsTableCreateCompanionBuilder,
+    $$JuzukItemsTableUpdateCompanionBuilder,
+    (JuzukItem, BaseReferences<_$AppDatabase, $JuzukItemsTable, JuzukItem>),
+    JuzukItem,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -2059,4 +2636,6 @@ class $AppDatabaseManager {
       $$HafsWordItemsTableTableManager(_db, _db.hafsWordItems);
   $$SurahItemsTableTableManager get surahItems =>
       $$SurahItemsTableTableManager(_db, _db.surahItems);
+  $$JuzukItemsTableTableManager get juzukItems =>
+      $$JuzukItemsTableTableManager(_db, _db.juzukItems);
 }

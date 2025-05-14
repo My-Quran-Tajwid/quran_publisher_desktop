@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+import '../../database/app_database.dart';
 import '../../database/mydb.dart';
 import '../../model/manuscript_string.dart';
 import '../home_page.dart';
@@ -74,14 +75,20 @@ class _MushafPageViewState extends State<MushafPageView> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'J1',
-                          style: const TextStyle(
-                              inherit: false,
-                              fontFamily: 'QCF4_Surah_Juzuk_Mudah',
-                              fontSize: 40,
-                              color: Colors.black),
-                        ),
+                        FutureBuilder<JuzukItem>(
+                            future: db.getJuzukForPage(currentPage),
+                            builder: (context, snapshot) {
+                              return Text(
+                                snapshot.hasData
+                                    ? 'J${snapshot.data!.juzuk}'
+                                    : '...',
+                                style: const TextStyle(
+                                    inherit: false,
+                                    fontFamily: 'QCF4_Surah_Juzuk_Mudah',
+                                    fontSize: 40,
+                                    color: Colors.black),
+                              );
+                            }),
                         Text(
                           's2',
                           style: const TextStyle(

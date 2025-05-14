@@ -35,6 +35,8 @@ class _MushafPageViewState extends State<MushafPageView> {
     setState(() {
       currentPage = page;
     });
+
+    pageController.text = currentPage.toString();
   }
 
   @override
@@ -159,11 +161,7 @@ class _MushafPageViewState extends State<MushafPageView> {
               children: [
                 TextButton.icon(
                   onPressed: () {
-                    if (currentPage > 1) {
-                      setState(() {
-                        currentPage--;
-                      });
-                    }
+                    _updatePage(currentPage - 1);
                   },
                   icon: const Icon(Icons.navigate_before_outlined),
                   label: const Text('Previous Page'),
@@ -219,11 +217,7 @@ class _MushafPageViewState extends State<MushafPageView> {
                   textDirection: TextDirection.rtl,
                   child: TextButton.icon(
                     onPressed: () {
-                      if (currentPage < 604) {
-                        setState(() {
-                          currentPage++;
-                        });
-                      }
+                      _updatePage(currentPage + 1);
                     },
                     // The directionality widget will mirror the icon, so we used
                     // the 'before' icon despite it supposed to be 'next'

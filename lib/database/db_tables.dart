@@ -56,3 +56,12 @@ class JuzukItems extends Table {
   IntColumn get page => integer().named('page')();
   TextColumn get verseText => text().named('verse_text')();
 }
+
+// Imported from Smart Quran app (pages table)
+class PageItems extends Table {
+  @override
+  String get tableName => 'PagesList';
+  IntColumn get page => integer().named('page')();
+  IntColumn get surah => integer().named('surah')();
+  IntColumn get ayat => integer().named('ayat')();
+}

@@ -89,14 +89,20 @@ class _MushafPageViewState extends State<MushafPageView> {
                                     color: Colors.black),
                               );
                             }),
-                        Text(
-                          's2',
-                          style: const TextStyle(
-                              inherit: false,
-                              fontFamily: 'QCF4_Surah_Juzuk_Mudah',
-                              fontSize: 40,
-                              color: Colors.black),
-                        ),
+                        FutureBuilder<SurahItem>(
+                            future: db.getSurahForPage(currentPage),
+                            builder: (context, snapshot) {
+                              return Text(
+                                snapshot.hasData
+                                    ? 's${snapshot.data!.surahNo}'
+                                    : '...',
+                                style: const TextStyle(
+                                    inherit: false,
+                                    fontFamily: 'QCF4_Surah_Juzuk_Mudah',
+                                    fontSize: 40,
+                                    color: Colors.black),
+                              );
+                            }),
                       ],
                     ),
                   ),

@@ -1749,6 +1749,232 @@ class JuzukItemsCompanion extends UpdateCompanion<JuzukItem> {
   }
 }
 
+class $PageItemsTable extends PageItems
+    with TableInfo<$PageItemsTable, PageItem> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $PageItemsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _pageMeta = const VerificationMeta('page');
+  @override
+  late final GeneratedColumn<int> page = GeneratedColumn<int>(
+      'page', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _surahMeta = const VerificationMeta('surah');
+  @override
+  late final GeneratedColumn<int> surah = GeneratedColumn<int>(
+      'surah', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _ayatMeta = const VerificationMeta('ayat');
+  @override
+  late final GeneratedColumn<int> ayat = GeneratedColumn<int>(
+      'ayat', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [page, surah, ayat];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'PagesList';
+  @override
+  VerificationContext validateIntegrity(Insertable<PageItem> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('page')) {
+      context.handle(
+          _pageMeta, page.isAcceptableOrUnknown(data['page']!, _pageMeta));
+    } else if (isInserting) {
+      context.missing(_pageMeta);
+    }
+    if (data.containsKey('surah')) {
+      context.handle(
+          _surahMeta, surah.isAcceptableOrUnknown(data['surah']!, _surahMeta));
+    } else if (isInserting) {
+      context.missing(_surahMeta);
+    }
+    if (data.containsKey('ayat')) {
+      context.handle(
+          _ayatMeta, ayat.isAcceptableOrUnknown(data['ayat']!, _ayatMeta));
+    } else if (isInserting) {
+      context.missing(_ayatMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => const {};
+  @override
+  PageItem map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return PageItem(
+      page: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}page'])!,
+      surah: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}surah'])!,
+      ayat: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}ayat'])!,
+    );
+  }
+
+  @override
+  $PageItemsTable createAlias(String alias) {
+    return $PageItemsTable(attachedDatabase, alias);
+  }
+}
+
+class PageItem extends DataClass implements Insertable<PageItem> {
+  final int page;
+  final int surah;
+  final int ayat;
+  const PageItem({required this.page, required this.surah, required this.ayat});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['page'] = Variable<int>(page);
+    map['surah'] = Variable<int>(surah);
+    map['ayat'] = Variable<int>(ayat);
+    return map;
+  }
+
+  PageItemsCompanion toCompanion(bool nullToAbsent) {
+    return PageItemsCompanion(
+      page: Value(page),
+      surah: Value(surah),
+      ayat: Value(ayat),
+    );
+  }
+
+  factory PageItem.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return PageItem(
+      page: serializer.fromJson<int>(json['page']),
+      surah: serializer.fromJson<int>(json['surah']),
+      ayat: serializer.fromJson<int>(json['ayat']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'page': serializer.toJson<int>(page),
+      'surah': serializer.toJson<int>(surah),
+      'ayat': serializer.toJson<int>(ayat),
+    };
+  }
+
+  PageItem copyWith({int? page, int? surah, int? ayat}) => PageItem(
+        page: page ?? this.page,
+        surah: surah ?? this.surah,
+        ayat: ayat ?? this.ayat,
+      );
+  PageItem copyWithCompanion(PageItemsCompanion data) {
+    return PageItem(
+      page: data.page.present ? data.page.value : this.page,
+      surah: data.surah.present ? data.surah.value : this.surah,
+      ayat: data.ayat.present ? data.ayat.value : this.ayat,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PageItem(')
+          ..write('page: $page, ')
+          ..write('surah: $surah, ')
+          ..write('ayat: $ayat')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(page, surah, ayat);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PageItem &&
+          other.page == this.page &&
+          other.surah == this.surah &&
+          other.ayat == this.ayat);
+}
+
+class PageItemsCompanion extends UpdateCompanion<PageItem> {
+  final Value<int> page;
+  final Value<int> surah;
+  final Value<int> ayat;
+  final Value<int> rowid;
+  const PageItemsCompanion({
+    this.page = const Value.absent(),
+    this.surah = const Value.absent(),
+    this.ayat = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  PageItemsCompanion.insert({
+    required int page,
+    required int surah,
+    required int ayat,
+    this.rowid = const Value.absent(),
+  })  : page = Value(page),
+        surah = Value(surah),
+        ayat = Value(ayat);
+  static Insertable<PageItem> custom({
+    Expression<int>? page,
+    Expression<int>? surah,
+    Expression<int>? ayat,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (page != null) 'page': page,
+      if (surah != null) 'surah': surah,
+      if (ayat != null) 'ayat': ayat,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  PageItemsCompanion copyWith(
+      {Value<int>? page,
+      Value<int>? surah,
+      Value<int>? ayat,
+      Value<int>? rowid}) {
+    return PageItemsCompanion(
+      page: page ?? this.page,
+      surah: surah ?? this.surah,
+      ayat: ayat ?? this.ayat,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (page.present) {
+      map['page'] = Variable<int>(page.value);
+    }
+    if (surah.present) {
+      map['surah'] = Variable<int>(surah.value);
+    }
+    if (ayat.present) {
+      map['ayat'] = Variable<int>(ayat.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PageItemsCompanion(')
+          ..write('page: $page, ')
+          ..write('surah: $surah, ')
+          ..write('ayat: $ayat, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -1756,12 +1982,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $HafsWordItemsTable hafsWordItems = $HafsWordItemsTable(this);
   late final $SurahItemsTable surahItems = $SurahItemsTable(this);
   late final $JuzukItemsTable juzukItems = $JuzukItemsTable(this);
+  late final $PageItemsTable pageItems = $PageItemsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [hafsSuraItems, hafsWordItems, surahItems, juzukItems];
+      [hafsSuraItems, hafsWordItems, surahItems, juzukItems, pageItems];
 }
 
 typedef $$HafsSuraItemsTableCreateCompanionBuilder = HafsSuraItemsCompanion
@@ -2626,6 +2853,141 @@ typedef $$JuzukItemsTableProcessedTableManager = ProcessedTableManager<
     (JuzukItem, BaseReferences<_$AppDatabase, $JuzukItemsTable, JuzukItem>),
     JuzukItem,
     PrefetchHooks Function()>;
+typedef $$PageItemsTableCreateCompanionBuilder = PageItemsCompanion Function({
+  required int page,
+  required int surah,
+  required int ayat,
+  Value<int> rowid,
+});
+typedef $$PageItemsTableUpdateCompanionBuilder = PageItemsCompanion Function({
+  Value<int> page,
+  Value<int> surah,
+  Value<int> ayat,
+  Value<int> rowid,
+});
+
+class $$PageItemsTableFilterComposer
+    extends Composer<_$AppDatabase, $PageItemsTable> {
+  $$PageItemsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get page => $composableBuilder(
+      column: $table.page, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get surah => $composableBuilder(
+      column: $table.surah, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get ayat => $composableBuilder(
+      column: $table.ayat, builder: (column) => ColumnFilters(column));
+}
+
+class $$PageItemsTableOrderingComposer
+    extends Composer<_$AppDatabase, $PageItemsTable> {
+  $$PageItemsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get page => $composableBuilder(
+      column: $table.page, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get surah => $composableBuilder(
+      column: $table.surah, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get ayat => $composableBuilder(
+      column: $table.ayat, builder: (column) => ColumnOrderings(column));
+}
+
+class $$PageItemsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $PageItemsTable> {
+  $$PageItemsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get page =>
+      $composableBuilder(column: $table.page, builder: (column) => column);
+
+  GeneratedColumn<int> get surah =>
+      $composableBuilder(column: $table.surah, builder: (column) => column);
+
+  GeneratedColumn<int> get ayat =>
+      $composableBuilder(column: $table.ayat, builder: (column) => column);
+}
+
+class $$PageItemsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $PageItemsTable,
+    PageItem,
+    $$PageItemsTableFilterComposer,
+    $$PageItemsTableOrderingComposer,
+    $$PageItemsTableAnnotationComposer,
+    $$PageItemsTableCreateCompanionBuilder,
+    $$PageItemsTableUpdateCompanionBuilder,
+    (PageItem, BaseReferences<_$AppDatabase, $PageItemsTable, PageItem>),
+    PageItem,
+    PrefetchHooks Function()> {
+  $$PageItemsTableTableManager(_$AppDatabase db, $PageItemsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PageItemsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PageItemsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PageItemsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> page = const Value.absent(),
+            Value<int> surah = const Value.absent(),
+            Value<int> ayat = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              PageItemsCompanion(
+            page: page,
+            surah: surah,
+            ayat: ayat,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required int page,
+            required int surah,
+            required int ayat,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              PageItemsCompanion.insert(
+            page: page,
+            surah: surah,
+            ayat: ayat,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$PageItemsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $PageItemsTable,
+    PageItem,
+    $$PageItemsTableFilterComposer,
+    $$PageItemsTableOrderingComposer,
+    $$PageItemsTableAnnotationComposer,
+    $$PageItemsTableCreateCompanionBuilder,
+    $$PageItemsTableUpdateCompanionBuilder,
+    (PageItem, BaseReferences<_$AppDatabase, $PageItemsTable, PageItem>),
+    PageItem,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -2638,4 +3000,6 @@ class $AppDatabaseManager {
       $$SurahItemsTableTableManager(_db, _db.surahItems);
   $$JuzukItemsTableTableManager get juzukItems =>
       $$JuzukItemsTableTableManager(_db, _db.juzukItems);
+  $$PageItemsTableTableManager get pageItems =>
+      $$PageItemsTableTableManager(_db, _db.pageItems);
 }

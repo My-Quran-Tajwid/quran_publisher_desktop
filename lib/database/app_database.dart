@@ -10,6 +10,7 @@ part 'app_database.g.dart';
   HafsWordItems,
   SurahItems,
   JuzukItems,
+  PageItems,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.queryExecutor);
@@ -39,6 +40,21 @@ class AppDatabase extends _$AppDatabase {
         .get();
 
     return juzs.first;
+  }
+
+  /// Get surah metadata. [surah] is the surah number
+  Future<SurahItem> getSurahMetadata(int surah) {
+    return (select(surahItems)..where((tbl) => tbl.surahNo.equals(surah)))
+        .getSingle();
+  }
+
+  /// Get surah item from [pageNumber]
+  Future<SurahItem> getSurahForPage(int pageNumber) async {
+    final x = (await (select(pageItems)
+          ..where((element) => element.page.equals(pageNumber)))
+        .getSingle());
+
+    return await getSurahMetadata(x.surah);
   }
 
   Future<(List<int> codePoints, String fontName)> getCodePointsForAyat({

@@ -172,12 +172,25 @@ class _MushafPageViewState extends State<MushafPageView> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
               children: [
+                IconButton(
+                  style: IconButton.styleFrom(
+                    foregroundColor: Theme.of(context).colorScheme.primary,
+                  ),
+                  onPressed: () {
+                    _updatePage(604);
+                  },
+                  tooltip: 'Go to last page',
+                  icon: const Icon(Icons.skip_previous_outlined),
+                ),
                 TextButton.icon(
                   onPressed: () {
-                    _updatePage(currentPage - 1);
+                    _updatePage(currentPage + 1);
                   },
-                  icon: const Icon(Icons.navigate_before_outlined),
-                  label: const Text('Previous Page'),
+                  icon: const Icon(
+                    Icons.navigate_before_outlined,
+                    size: 24,
+                  ),
+                  label: const Text('Next Page'),
                 ),
                 Spacer(),
                 // The page number input
@@ -230,12 +243,28 @@ class _MushafPageViewState extends State<MushafPageView> {
                   textDirection: TextDirection.rtl,
                   child: TextButton.icon(
                     onPressed: () {
-                      _updatePage(currentPage + 1);
+                      _updatePage(currentPage - 1);
                     },
                     // The directionality widget will mirror the icon, so we used
                     // the 'before' icon despite it supposed to be 'next'
-                    icon: const Icon(Icons.navigate_before_outlined),
-                    label: const Text('Next Page'),
+                    icon: const Icon(
+                      Icons.navigate_before_outlined,
+                      size: 24,
+                    ),
+                    label: const Text('Previous Page'),
+                  ),
+                ),
+                Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: IconButton(
+                    style: IconButton.styleFrom(
+                      foregroundColor: Theme.of(context).colorScheme.primary,
+                    ),
+                    onPressed: () {
+                      _updatePage(1);
+                    },
+                    tooltip: 'Go to first page',
+                    icon: const Icon(Icons.skip_next_outlined),
                   ),
                 ),
               ],

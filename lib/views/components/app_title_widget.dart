@@ -13,15 +13,19 @@ class AppTitleWidget extends StatelessWidget {
         onTap: () async {
           final packageInfo = await PackageInfo.fromPlatform();
           showAboutDialog(
-            context: context,
-            applicationName: 'Quran Computer Publication',
-            applicationVersion: 'v${packageInfo.version}',
-            applicationIcon: Image.asset(
-              'assets/logo/logo500x500.png',
-              width: 180,
-              height: 180,
-            ),
-          );
+              context: context,
+              applicationName: 'Quran Computer Publication',
+              applicationVersion: 'v${packageInfo.version}',
+              applicationIcon: Image.asset(
+                'assets/logo/logo500x500.png',
+                width: 180,
+                height: 180,
+              ),
+              children: [
+                Text(
+                  'This app is currently in beta version, and we welcome your feedback and suggestions. Learn more on https://github.com/My-Quran-Tajwid/quran_publisher_desktop/',
+                ),
+              ]);
         },
         child: const Row(
           children: [

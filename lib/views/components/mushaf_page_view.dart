@@ -229,16 +229,20 @@ class _MushafPageViewState extends State<MushafPageView> {
                   style: IconButton.styleFrom(
                     foregroundColor: Theme.of(context).colorScheme.primary,
                   ),
-                  onPressed: () {
-                    _updatePage(604);
-                  },
+                  onPressed: currentPage == 604
+                      ? null
+                      : () {
+                          _updatePage(604);
+                        },
                   tooltip: 'Go to last page',
                   icon: const Icon(Icons.skip_previous_outlined),
                 ),
                 TextButton.icon(
-                  onPressed: () {
-                    _updatePage(currentPage + 1);
-                  },
+                  onPressed: currentPage == 604
+                      ? null
+                      : () {
+                          _updatePage(currentPage + 1);
+                        },
                   icon: const Icon(
                     Icons.navigate_before_outlined,
                     size: 24,
@@ -295,9 +299,11 @@ class _MushafPageViewState extends State<MushafPageView> {
                 Directionality(
                   textDirection: TextDirection.rtl,
                   child: TextButton.icon(
-                    onPressed: () {
-                      _updatePage(currentPage - 1);
-                    },
+                    onPressed: currentPage == 1
+                        ? null
+                        : () {
+                            _updatePage(currentPage - 1);
+                          },
                     // The directionality widget will mirror the icon, so we used
                     // the 'before' icon despite it supposed to be 'next'
                     icon: const Icon(
@@ -313,9 +319,11 @@ class _MushafPageViewState extends State<MushafPageView> {
                     style: IconButton.styleFrom(
                       foregroundColor: Theme.of(context).colorScheme.primary,
                     ),
-                    onPressed: () {
-                      _updatePage(1);
-                    },
+                    onPressed: currentPage == 1
+                        ? null
+                        : () {
+                            _updatePage(1);
+                          },
                     tooltip: 'Go to first page',
                     icon: const Icon(Icons.skip_next_outlined),
                   ),

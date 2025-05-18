@@ -3,7 +3,6 @@ import 'package:gap/gap.dart';
 
 import '../../database/app_database.dart';
 import '../../database/mydb.dart';
-import '../../model/manuscript_string.dart';
 import '../home_page.dart';
 
 /// Display Quran by page as per physical mushaf
@@ -108,16 +107,16 @@ class _MushafPageViewState extends State<MushafPageView> {
                   ),
                 ),
                 // Top gap
-                const Gap(40),
+                const Gap(32),
                 // Body
                 Row(
                   children: [
                     // Left gap
-                    const Gap(90),
+                    const Gap(94.5),
                     Directionality(
                       textDirection: TextDirection.rtl,
-                      child: FutureBuilder<List<ManuscriptString>>(
-                          future: db.getManuscriptStringByPage(currentPage),
+                      child: FutureBuilder<List<HafsWordItem>>(
+                          future: db.getQuranTextByPage(currentPage),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
@@ -138,29 +137,83 @@ class _MushafPageViewState extends State<MushafPageView> {
                                   // See https://unicode-explorer.com/c/202E
                                   text: '\u202e',
                                   style: const TextStyle(color: Colors.black),
+
                                   children: <InlineSpan>[
                                     for (var i = 0; i < quranText.length; i++)
-                                      TextSpan(
-                                        text: quranText[i].text,
-                                        style: TextStyle(
-                                          fontFamily: widget.tajwidOption ==
-                                                  TajwidOptions.tajwidKdn
-                                              ? '${quranText[i].fontName}_COLOR'
-                                              : quranText[i].fontName,
-                                          fontSize: 25.4,
-                                          height: 1.8,
-                                          color: Colors.black,
+                                      if (quranText[i].type == 5)
+                                        WidgetSpan(
+                                            child: Container(
+                                          alignment: Alignment.center,
+                                          height: 45,
+                                          width: 430,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff6e87cd)
+                                                .withValues(alpha: .2),
+                                            border: Border.all(
+                                              color: Color(0xff6e87cd),
+                                              width: 3,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            String.fromCharCode(
+                                                quranText[i].fontCode),
+                                            style: TextStyle(
+                                              fontFamily: quranText[i].fontName,
+                                              fontSize: 22.4,
+                                              height: 1.8,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ))
+                                      else if (quranText[i].type == 4)
+                                        WidgetSpan(
+                                          child: SizedBox(
+                                            width: double.infinity,
+                                            child: Text(
+                                              String.fromCharCode(
+                                                  quranText[i].fontCode),
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontFamily: widget
+                                                            .tajwidOption ==
+                                                        TajwidOptions.tajwidKdn
+                                                    ? '${quranText[i].fontName}_COLOR'
+                                                    : quranText[i].fontName,
+                                                fontSize: 25.4,
+                                                height: 1.8,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      else
+                                        TextSpan(
+                                          text: String.fromCharCode(
+                                              quranText[i].fontCode),
+                                          style: TextStyle(
+                                            fontFamily: widget.tajwidOption ==
+                                                    TajwidOptions.tajwidKdn
+                                                ? '${quranText[i].fontName}_COLOR'
+                                                : quranText[i].fontName,
+                                            fontSize: 25.4,
+                                            height: 1.8,
+                                            color: Colors.black,
+                                          ),
                                         ),
-                                      ),
                                   ],
                                 ),
                                 textAlign: TextAlign.center,
+                                textHeightBehavior: TextHeightBehavior(
+                                  // this will shift the text slighly below. So TopGap can be
+                                  // harmonize with this one.
+                                  applyHeightToFirstAscent: false,
+                                ),
                               ),
                             );
                           }),
                     ),
                     // Right gap
-                    const Gap(100),
+                    const Gap(94.5),
                   ],
                 ),
                 // bottom gap

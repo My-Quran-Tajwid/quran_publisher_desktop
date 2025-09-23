@@ -38,7 +38,7 @@ dependencies:
   flutter_bidi_text: ^1.0.2
   gap: ^3.0.1
   google_fonts: ^6.2.1
-  package_info_plus: ^8.1.1
+  package_info_plus: ^9.0.0
   path_provider: ^2.1.5
   path: ^1.9.0
   sqlite3_flutter_libs: ^0.5.26
@@ -52,7 +52,7 @@ dev_dependencies:
 
   build_runner: ^2.4.13
   drift_dev: ^2.21.2
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -64,7 +64,8 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this:
+  # If the editor complains about missing fonts, remember to initialize the
+  # submodules. See README for details.
   assets:
     - fonts/quran-fonts/fonts/King Fahd Complex/Original/
     - fonts/quran-fonts/fonts/King Fahd Complex/Original/Hafs-QCF4/

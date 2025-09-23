@@ -266,7 +266,7 @@ class _HomePageState extends State<HomePage> {
                                       ],
                                       onChanged: (value) async =>
                                           _setFromSurah(value),
-                                      value: fromSurah,
+                                      initialValue: fromSurah,
                                     );
                                   },
                                 ),
@@ -356,7 +356,7 @@ class _HomePageState extends State<HomePage> {
                                           toSurah = value;
                                         });
                                       },
-                                      value: toSurah,
+                                      initialValue: toSurah,
                                     );
                                   },
                                 ),

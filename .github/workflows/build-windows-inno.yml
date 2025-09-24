@@ -31,7 +31,7 @@ jobs:
   build_windows:
     name: 🪟 Build Windows App
     needs: extract_version
-    runs-on: windows-2025
+    runs-on: windows-latest
     steps:
       - name: Clone repository
         uses: actions/checkout@v4

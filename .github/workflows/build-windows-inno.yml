@@ -55,9 +55,10 @@ jobs:
           Copy-Item -Path "temp_vcredist\visual-cpp-redistributable-main\*.dll" -Destination "build\windows\x64\runner\Release\" -Force
 
       - name: Run Inno Setup Compiler
-        uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
-        with:
-          path: inno-compiler/inno-build-installer.iss
+        run: |
+          choco install innosetup -y
+          "%programfiles(x86)%\Inno Setup 6\iscc.exe" "inno-compiler\inno-build-installer.iss"
+        shell: cmd
 
       - name: Rename installer to include version
         run: |

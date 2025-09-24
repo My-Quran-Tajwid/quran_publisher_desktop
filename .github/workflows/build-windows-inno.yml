@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'App version override (leave empty to extract from pubspec.yaml)'
+        description: "App version override (leave empty to extract from pubspec.yaml)"
         required: false
-        default: ''
+        default: ""
 
 jobs:
   extract_version:
@@ -56,8 +56,10 @@ jobs:
 
       - name: Run Inno Setup Compiler
         run: |
+          choco install innosetup -y
           "%programfiles(x86)%\Inno Setup 6\iscc.exe" "inno-compiler\inno-build-installer.iss"
         shell: cmd
+
       - name: Rename installer to include version
         run: |
           Move-Item -Path "build\installer\app-windows-installer.exe" -Destination "MQJ-${{ needs.extract_version.outputs.version }}-windows-64-installer.exe" -Force
@@ -67,5 +69,3 @@ jobs:
         with:
           name: MQJ-${{ needs.extract_version.outputs.version }}-windows-installer
           path: MQJ-${{ needs.extract_version.outputs.version }}-windows-64-installer.exe
-
-  

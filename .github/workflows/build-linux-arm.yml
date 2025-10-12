@@ -4,8 +4,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_linux:
+  build_linux_arm64:
     name: 🐧 Build Linux ARM64 App
+    # partner images: https://github.com/actions/partner-runner-images?tab=readme-ov-file#available-images
     runs-on: ubuntu-24.04-arm
     steps:
       - name: Clone repository

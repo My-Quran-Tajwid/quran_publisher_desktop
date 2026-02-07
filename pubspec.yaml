@@ -29,7 +29,7 @@ dependencies:
   drift: ^2.21.0
   flutter_bidi_text: ^1.0.2
   gap: ^3.0.1
-  google_fonts: ^6.2.1
+  google_fonts: ^8.0.1
   package_info_plus: ^9.0.0
   path_provider: ^2.1.5
   path: ^1.9.0

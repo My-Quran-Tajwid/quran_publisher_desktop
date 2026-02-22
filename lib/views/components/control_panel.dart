@@ -44,10 +44,6 @@ class _ControlPanelState extends ConsumerState<ControlPanel> {
     super.dispose();
   }
 
-  Future<int?> _getTotalAyatInSurah(int surahNumber) {
-    return MyDb.instance.database.getTotalAyatInSurah(surahNumber);
-  }
-
   void _setFromSurah(int? newFromSurah) async {
     if (newFromSurah == null) return;
     final fromSurah = ref.read(fromSurahProvider);
@@ -59,7 +55,8 @@ class _ControlPanelState extends ConsumerState<ControlPanel> {
     }
     ref.read(fromSurahProvider.notifier).value = newFromSurah;
 
-    final totalAyat = await _getTotalAyatInSurah(newFromSurah);
+    final totalAyat =
+        await MyDb.instance.database.getTotalAyatInSurah(newFromSurah);
     final fromAyat = ref.read(fromAyatProvider);
     if (totalAyat != null && fromAyat > totalAyat) {
       ref.read(fromAyatProvider.notifier).value = totalAyat;
@@ -74,7 +71,8 @@ class _ControlPanelState extends ConsumerState<ControlPanel> {
     final fromAyat = ref.read(fromAyatProvider);
     if (newFromAyat == fromAyat) return;
 
-    final totalAyat = await _getTotalAyatInSurah(forSurahNumber);
+    final totalAyat =
+        await MyDb.instance.database.getTotalAyatInSurah(forSurahNumber);
     if (totalAyat != null && newFromAyat > totalAyat) {
       ref.read(fromAyatProvider.notifier).value = totalAyat;
       _fromAyatController.text = totalAyat.toString();
@@ -98,7 +96,8 @@ class _ControlPanelState extends ConsumerState<ControlPanel> {
     final toAyat = ref.read(toAyatProvider);
     if (newToAyat == toAyat) return;
 
-    final totalAyat = await _getTotalAyatInSurah(forSurahNumber);
+    final totalAyat =
+        await MyDb.instance.database.getTotalAyatInSurah(forSurahNumber);
     if (totalAyat != null && newToAyat > totalAyat) {
       ref.read(toAyatProvider.notifier).value = totalAyat;
       _toAyatController.text = totalAyat.toString();
@@ -270,7 +269,8 @@ class _ControlPanelState extends ConsumerState<ControlPanel> {
                     Expanded(
                       flex: 2,
                       child: FutureBuilder(
-                        future: _getTotalAyatInSurah(fromSurah),
+                        future: MyDb.instance.database
+                            .getTotalAyatInSurah(fromSurah),
                         builder: (context, snapshot) {
                           if (snapshot.hasError) {
                             return Text(snapshot.error.toString());
@@ -354,7 +354,8 @@ class _ControlPanelState extends ConsumerState<ControlPanel> {
                     Expanded(
                       flex: 2,
                       child: FutureBuilder(
-                        future: _getTotalAyatInSurah(toSurah),
+                        future:
+                            MyDb.instance.database.getTotalAyatInSurah(toSurah),
                         builder: (context, snapshot) {
                           if (snapshot.hasError) {
                             return Text(snapshot.error.toString());

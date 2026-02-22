@@ -1,23 +1,23 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
 import '../../database/app_database.dart';
 import '../../database/mydb.dart';
-import '../home_page.dart';
+import '../../model/quran_enums.dart';
+import '../../providers/quran_selection_provider.dart';
 
 /// Display Quran by page as per physical mushaf
-class MushafPageView extends StatefulWidget {
-  const MushafPageView({super.key, required this.tajwidOption});
-
-  final TajwidOptions tajwidOption;
+class MushafPageView extends ConsumerStatefulWidget {
+  const MushafPageView({super.key});
 
   @override
-  State<MushafPageView> createState() => _MushafPageViewState();
+  ConsumerState<MushafPageView> createState() => _MushafPageViewState();
 }
 
-class _MushafPageViewState extends State<MushafPageView> {
+class _MushafPageViewState extends ConsumerState<MushafPageView> {
   final db = MyDb.instance.database;
   final FocusNode focusNode = FocusNode();
   late final TextEditingController pageController;
@@ -189,8 +189,8 @@ class _MushafPageViewState extends State<MushafPageView> {
                                                       quranText[i].fontCode),
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
-                                                    fontFamily: widget
-                                                                .tajwidOption ==
+                                                    fontFamily: ref.watch(
+                                                                tajwidOptionProvider) ==
                                                             TajwidOptions
                                                                 .tajwidKdn
                                                         ? '${quranText[i].fontName}_COLOR'
@@ -207,8 +207,8 @@ class _MushafPageViewState extends State<MushafPageView> {
                                               text: String.fromCharCode(
                                                   quranText[i].fontCode),
                                               style: TextStyle(
-                                                fontFamily: widget
-                                                            .tajwidOption ==
+                                                fontFamily: ref.watch(
+                                                            tajwidOptionProvider) ==
                                                         TajwidOptions.tajwidKdn
                                                     ? '${quranText[i].fontName}_COLOR'
                                                     : quranText[i].fontName,

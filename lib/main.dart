@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'database/mydb.dart';
@@ -22,7 +23,7 @@ void main() {
           'fonts/quran-fonts/fonts/King Fahd Complex/Original/QCF4_QBSML.ttf',
       fontFamily: 'QCF4_QBSML');
 
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 Future<void> _loadHafsOriginalFonts() async {

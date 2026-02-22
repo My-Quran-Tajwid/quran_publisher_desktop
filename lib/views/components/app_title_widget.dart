@@ -12,6 +12,7 @@ class AppTitleWidget extends StatelessWidget {
       child: GestureDetector(
         onTap: () async {
           final packageInfo = await PackageInfo.fromPlatform();
+          if (!context.mounted) return;
           showAboutDialog(
               context: context,
               applicationName: 'Quran Computer Publication',

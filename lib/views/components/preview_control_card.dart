@@ -1,33 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
-import '../home_page.dart';
+import '../../model/quran_enums.dart';
+import '../../providers/quran_selection_provider.dart';
 
-class PreviewControlCard extends StatefulWidget {
-  const PreviewControlCard({
-    super.key,
-    required this.onFontSizeChanged,
-    required this.onSpacingChanged,
-    required this.onPreviewTypeChanged,
-    this.previewType = PreviewType.justText,
-  });
-
-  final Function(double fontSize) onFontSizeChanged;
-  final Function(double spacing) onSpacingChanged;
-  final Function(PreviewType previewType) onPreviewTypeChanged;
-  final PreviewType? previewType;
+class PreviewControlCard extends ConsumerStatefulWidget {
+  const PreviewControlCard({super.key});
 
   @override
-  State<PreviewControlCard> createState() => _PreviewControlCardState();
+  ConsumerState<PreviewControlCard> createState() => _PreviewControlCardState();
 }
 
-class _PreviewControlCardState extends State<PreviewControlCard> {
+class _PreviewControlCardState extends ConsumerState<PreviewControlCard> {
   final TextEditingController fontSizeController = TextEditingController();
   final TextEditingController spacingValueController = TextEditingController();
   double? selectedFontSize;
 
   @override
   Widget build(BuildContext context) {
+    final previewType = ref.watch(previewTypeProvider);
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -44,20 +37,19 @@ class _PreviewControlCardState extends State<PreviewControlCard> {
             children: [
               const Text('Preview Type:'),
               const Gap(4),
-              DropdownButton(
+              DropdownButton<PreviewType>(
                 items: PreviewType.values
                     .map((previewType) => DropdownMenuItem(
                           value: previewType,
-                          // TODO: Remove this after adding page preview feature
                           child: Text(previewType.label),
                         ))
                     .toList(),
                 onChanged: (value) {
                   if (value == null) return;
-                  widget.onPreviewTypeChanged(value);
+                  ref.read(previewTypeProvider.notifier).value = value;
                 },
-                value: widget.previewType,
-              )
+                value: previewType,
+              ),
             ],
           ),
           const Gap(12),
@@ -72,7 +64,7 @@ class _PreviewControlCardState extends State<PreviewControlCard> {
                   setState(() {
                     selectedFontSize = newValue;
                   });
-                  widget.onFontSizeChanged(newValue);
+                  ref.read(previewFontSizeProvider.notifier).value = newValue;
                 },
                 dropdownMenuEntries: [
                   24.0,
@@ -103,8 +95,7 @@ class _PreviewControlCardState extends State<PreviewControlCard> {
                   setState(() {
                     selectedFontSize = newValue;
                   });
-
-                  widget.onSpacingChanged(newValue);
+                  ref.read(previewSpacingProvider.notifier).value = newValue;
                 },
                 dropdownMenuEntries: [
                   1.0,

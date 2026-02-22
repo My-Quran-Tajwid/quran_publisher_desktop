@@ -1,28 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../database/mydb.dart';
-import '../home_page.dart';
+import '../../model/quran_enums.dart';
+import '../../providers/quran_selection_provider.dart';
 
 /// Which one to show in an ayat, first one or last one.
 enum KalimahPreview { showFirst, showLast }
 
 /// Preview single kalimah from given ayat
-class KalimahPreviewWidget extends StatelessWidget {
+class KalimahPreviewWidget extends ConsumerWidget {
   const KalimahPreviewWidget({
     super.key,
     required this.surahNumber,
     required this.ayatNumber,
-    required this.tajwidOption,
     this.kalimahPreview = KalimahPreview.showFirst,
   });
 
   final int surahNumber;
   final int ayatNumber;
-  final TajwidOptions tajwidOption;
   final KalimahPreview? kalimahPreview;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tajwidOption = ref.watch(tajwidOptionProvider);
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),

@@ -164,6 +164,7 @@ class _ControlPanelState extends ConsumerState<ControlPanel> {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
+          const Gap(kToolbarHeight),
           // ── Mushaf Settings ──────────────────────────────────────────
           Container(
             padding: const EdgeInsets.all(16),

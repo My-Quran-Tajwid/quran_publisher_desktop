@@ -2,13 +2,13 @@ import 'package:bidi/bidi.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_resizable_container/flutter_resizable_container.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../database/mydb.dart';
 import '../model/manuscript_string.dart';
 import '../model/quran_enums.dart';
 import '../providers/quran_selection_provider.dart';
-import 'components/app_title_widget.dart';
 import 'components/control_panel.dart';
 import 'components/mushaf_page_view.dart';
 
@@ -31,25 +31,23 @@ class HomePage extends ConsumerWidget {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        body: ResizableContainer(
+          direction: Axis.horizontal,
           children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
-              child: AppTitleWidget(),
-            ),
-            Expanded(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(child: const ControlPanel()),
-                  ),
-                  if (previewType == PreviewType.mushafPage)
-                    const Expanded(child: MushafPageView())
-                  else
-                    const Expanded(child: _QuranTextPreview()),
-                ],
+            ResizableChild(
+              size: const ResizableSize.expand(min: 400),
+              divider: ResizableDivider(
+                thickness: 2,
+                color: Colors.grey.shade200,
+                cursor: SystemMouseCursors.resizeLeftRight,
               ),
+              child: SingleChildScrollView(child: const ControlPanel()),
+            ),
+            ResizableChild(
+              size: const ResizableSize.expand(min: 300),
+              child: previewType == PreviewType.mushafPage
+                  ? const MushafPageView()
+                  : const _QuranTextPreview(),
             ),
           ],
         ),
@@ -73,7 +71,7 @@ class _QuranTextPreview extends ConsumerWidget {
 
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.fromLTRB(16.0, kToolbarHeight, 16.0, 0),
         child: Directionality(
           textDirection: TextDirection.rtl,
           child: FutureBuilder(

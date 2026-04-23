@@ -19,7 +19,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: recursive
 
@@ -28,10 +28,11 @@ jobs:
         with:
           channel: ${{ inputs.flutterChannel }}
           architecture: x64
+          cache: true
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6.4.0
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Flutter build for MacOS
         run: |
@@ -47,7 +48,7 @@ jobs:
           appdmg appdmg/config.json appdmg/QuranPublisherDesktop-Macos.dmg
 
       - name: Upload the installer as an artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.1
         with:
           path: "appdmg/QuranPublisherDesktop-Macos.dmg"
 

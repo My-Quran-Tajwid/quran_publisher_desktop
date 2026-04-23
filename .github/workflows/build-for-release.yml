@@ -1,4 +1,4 @@
-name: Build Windows & Linux Executable on Release
+name: "[On Release] Build Desktop Executables"
 
 on:
   release:
@@ -15,7 +15,7 @@ jobs:
       version: ${{ steps.get_version.outputs.version }}
     steps:
       - name: Clone repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Extract version from pubspec.yaml
         id: get_version
         run: |
@@ -29,13 +29,14 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Clone repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: recursive
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          cache: true
       - name: Build App
         run: |
           flutter pub get
@@ -56,7 +57,7 @@ jobs:
         run: |
           Move-Item -Path "build\installer\app-windows-installer.exe" -Destination "MQJ-${{ needs.extract_version.outputs.version }}-windows-64-installer.exe" -Force
       - name: Upload Windows App to release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3.0.0
         with:
           files: |
             build/windows/x64/runner/Release/MQJ-${{ needs.extract_version.outputs.version }}-windows-x64.zip
@@ -68,13 +69,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clone repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: recursive
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          cache: true
       - name: Install Linux dependencies
         run: |
           sudo apt-get update -y
@@ -86,7 +88,7 @@ jobs:
       - name: Create Linux zip archive
         run: cd build/linux/x64/release/bundle/ && zip -r "MQJ-${{ needs.extract_version.outputs.version }}-linux-x64.zip" *
       - name: Upload Linux App to release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3.0.0
         with:
           files: build/linux/x64/release/bundle/MQJ-${{ needs.extract_version.outputs.version }}-linux-x64.zip
 
@@ -96,7 +98,7 @@ jobs:
     runs-on: ubuntu-24.04-arm
     steps:
       - name: Clone repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: recursive
       # Flutter arm only available on master for now https://github.com/subosito/flutter-action/issues/345#issuecomment-2657332687
@@ -105,6 +107,7 @@ jobs:
         with:
           channel: master
           flutter-version: 3.35.6 # pin to current stable version
+          cache: true
       - run: sudo apt-get update -y
       - run: sudo apt-get install -y ninja-build libgtk-3-dev
       - name: Build Linux App
@@ -114,7 +117,7 @@ jobs:
       - name: Create Linux zip archive
         run: cd build/linux/arm64/release/bundle/ && zip -r "MQJ-${{ needs.extract_version.outputs.version }}-linux-arm64.zip" *
       - name: Upload Linux App to release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3.0.0
         with:
           files: build/linux/arm64/release/bundle/MQJ-${{ needs.extract_version.outputs.version }}-linux-arm64.zip
 
@@ -122,7 +125,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Clone repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: recursive
 
@@ -130,10 +133,11 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          cache: true
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6.4.0
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Flutter build for MacOS
         run: |
@@ -149,6 +153,6 @@ jobs:
           appdmg appdmg/config.json appdmg/QuranPublisherDesktop-Macos.dmg
 
       - name: Upload MacOS App to release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3.0.0
         with:
           files: appdmg/QuranPublisherDesktop-Macos.dmg

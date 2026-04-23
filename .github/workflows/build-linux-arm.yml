@@ -1,4 +1,4 @@
-name: Linux ARM64 (Portable)
+name: Build Linux ARM64 (Portable)
 
 on:
   workflow_dispatch:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-24.04-arm
     steps:
       - name: Clone repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: recursive
 
@@ -19,7 +19,8 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: master
-          flutter-version: 3.35.6
+          flutter-version: 3.41.7
+          cache: true
 
       - run: sudo apt-get update -y
       - run: sudo apt-get install -y ninja-build libgtk-3-dev
@@ -30,7 +31,7 @@ jobs:
           flutter build linux --release
 
       - name: Upload App to artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: linux-arm64
           path: build/linux/arm64/release/bundle/

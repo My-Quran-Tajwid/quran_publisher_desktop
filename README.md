@@ -8,7 +8,7 @@ This app aided the development of coloured tajwid fonts (in development)
 
 ## Download
 
-Go to [releases](https://github.com/My-Quran-Tajwid/quran_publisher_desktop/releases) and find binaries for your OS. Currently available on Windows & Linux.
+Go to [releases](https://github.com/My-Quran-Tajwid/quran_publisher_desktop/releases) and find binaries for your OS. Available on macos, Windows & Linux.
 
 ## Getting Started
 

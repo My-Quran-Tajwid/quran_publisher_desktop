@@ -8,6 +8,7 @@ import '../../database/app_database.dart';
 import '../../database/mydb.dart';
 import '../../model/quran_enums.dart';
 import '../../providers/quran_selection_provider.dart';
+import 'app_title_component.dart';
 import 'kalimah_preview_widget.dart';
 import 'preview_control_card.dart';
 
@@ -164,7 +165,10 @@ class _ControlPanelState extends ConsumerState<ControlPanel> {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          const Gap(kToolbarHeight),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 16.0),
+            child: AppTitleComponent(),
+          ),
           // ── Mushaf Settings ──────────────────────────────────────────
           Container(
             padding: const EdgeInsets.all(16),

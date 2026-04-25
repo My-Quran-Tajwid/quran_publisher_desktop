@@ -4,7 +4,9 @@
 #define MyAppName "My Quran Tajwid"
 #define MyAppVersion GetStringFileInfo("..\build\windows\x64\runner\Release\quran_publisher_desktop.exe", "ProductVersion")
 #define MyAppPublisher "Muhammad Fareez"
+#define MyAppPublisherURL "https://iqfareez.com"
 #define MyAppURL "https://qurantajwid.my/"
+#define MyAppGithubURL "https://github.com/My-Quran-Tajwid/quran_publisher_desktop"
 #define MyAppExeName "quran_publisher_desktop.exe"
 #define SourcePath "..\build\windows\x64\runner\Release"
 
@@ -16,9 +18,9 @@ AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
-AppPublisherURL={#MyAppURL}
-AppSupportURL={#MyAppURL}
-AppUpdatesURL={#MyAppURL}
+AppPublisherURL={#MyAppPublisherURL}
+AppSupportURL={#MyAppGithubURL}
+AppUpdatesURL={#MyAppGithubURL}/releases
 DefaultDirName={autopf}\{#MyAppName}
 UninstallDisplayIcon={app}\{#MyAppExeName}
 ; "ArchitecturesAllowed=x64compatible" specifies that Setup cannot run
@@ -38,7 +40,7 @@ OutputDir=..\build\installer
 OutputBaseFilename=app-windows-installer
 SetupIconFile=.\installer_icon.ico
 SolidCompression=yes
-WizardStyle=modern
+WizardStyle=modern dynamic
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -58,4 +60,3 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
-

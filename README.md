@@ -39,8 +39,6 @@ Then, run the app:
 flutter run
 ```
 
-(as of now, only tested on Windows)
-
 ## Updating Database schema
 
 Add or Update the schema in database/db_tables.dart file. Update the @DriftDatabase tables in database/app_database.dart. Then run,
